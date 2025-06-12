@@ -10,8 +10,10 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
+// Endpoint pour le chatbot
 app.post('/api/chat', async (req, res) => {
   const userMsg = req.body.message || '';
+
   const messages = [
     {
       role: 'system',
@@ -35,14 +37,15 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const data = await r.json();
-console.log("🧠 Réponse complète de l'API :", JSON.stringify(data, null, 2));    console.log("🧠 Réponse OpenAI :", JSON.stringify(data, null, 2));console.log("🧠 Réponse complète de l'API :", JSON.stringify(data, null, 2));    const reply = data.choices?.[0]?.message?.content || "InStories : pas de réponse.";
+    const reply = data.choices?.[0]?.message?.content || "InStories : pas de réponse.";
     res.json({ reply });
   } catch (err) {
-    console.error("❌ Erreur serveur :", err);
+    console.error(err);
     res.status(500).json({ reply: "InStories : erreur serveur." });
   }
 });
 
+// Sert le frontend en production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'build')));
   app.get('*', (req, res) =>
@@ -53,11 +56,3 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(PORT, () => {
   console.log(`✅ Backend GPT prêt sur port ${PORT}`);
 });
-
-// Serve React build en production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  app.use(express.static(path.join(__dirname, 'build')));
-  app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, 'build', 'index.html')));
-}
