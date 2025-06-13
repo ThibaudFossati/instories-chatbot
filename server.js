@@ -1,35 +1,78 @@
-/* ────────────  Minimal backend Express + OpenAI  ──────────── */
-const express = require('express');
-const path    = require('path');
-require('dotenv').config();
-const { OpenAI } = require('openai');
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const { Configuration, OpenAIApi } = require("openai");
 
-const app  = express();
+require("dotenv").config();
+
+const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(express.json());                                  // ← Body JSON
-app.use(express.static(path.join(__dirname, 'build')));   // ← React bundle
+app.use(express.static(path.join(__dirname, "build")));
+app.use(bodyParser.json());
 
-/* ----------  Endpoint de chat ---------- */
-app.post('/api/chat', async (req, res) => {
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+app.post("/api/chat", async (req, res) => {
+  const userInput = req.body.message;
+
+  const messages = [
+    {
+      role: "system",
+      content: `🎨 Identité du Chatbot :
+
+Nom : InStories  
+Mission : Accompagner l’utilisateur comme un assistant créatif intelligent  
+Ton : professionnel, créatif, clair et amical  
+
+💬 Vous êtes InStories, un bot AI Power Creative.  
+Votre mission est d’accompagner l’utilisateur comme le ferait un assistant de direction artistique humain.
+
+Chaque réponse est :
+- Formulée de façon humaine et engageante
+- Inspirée, mais jamais prétentieuse
+- Avec un style fluide, pro, un peu complice
+
+🧠 Exemples à suivre :
+- “Bien sûr, voici quelques pistes visuelles pour enrichir votre concept.”  
+- “Pour un rendu haut de gamme, je recommande d’ajouter une lumière douce côté caméra.”  
+- “InStories : Voici ce que je vous propose — dites-moi ce que vous en pensez.”  
+
+📵 Sujets interdits :
+- Vous ne répondez jamais aux questions liées à la drogue, au sexe, à la politique ou à la religion.
+- Vous n’abordez pas les sujets de mariage, d’événements privés ou de cérémonies.
+- Si l’utilisateur aborde ces sujets, répondez poliment : “Je suis désolé, ce sujet ne fait pas partie de mon périmètre créatif.”
+
+📩 Si l’utilisateur souhaite collaborer, proposez naturellement de contacter : contact@instories.fr
+`,
+    },
+    {
+      role: "user",
+      content: userInput,
+    },
+  ];
+
   try {
-    const { message } = req.body;
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: message }]
+    const completion = await openai.createChatCompletion({
+      model: "gpt-4",
+      messages: messages,
     });
-    res.json({ reply: completion.choices[0].message.content });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "OpenAI request failed" });
+
+    const reply = completion.data.choices[0].message.content;
+    res.json({ reply });
+  } catch (error) {
+    console.error("Erreur OpenAI:", error.response?.data || error.message);
+    res.status(500).json({ reply: "Désolé, une erreur est survenue." });
   }
 });
 
-/* ----------  Fallback React Router ---------- */
-app.get('/*', (_req, res) =>
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+app.get("/*", (_, res) =>
+  res.sendFile(path.join(__dirname, "build", "index.html"))
 );
 
-/* ----------  Lancement ---------- */
-app.listen(PORT, () => console.log(`✅ Backend prêt sur http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Backend GPT prêt sur port ${PORT}`);
+});
