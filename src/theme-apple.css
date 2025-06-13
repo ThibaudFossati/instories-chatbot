@@ -7,6 +7,15 @@
   --text-light: #fff;
   --radius: 20px;
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1e;
+    --bubble-user: #0a84ff;
+    --bubble-bot: #2c2c2e;
+    --text-dark: #fff;
+    --text-light: #fff;
+  }
+}
 body {
   margin: 0;
   font-family: var(--font);
