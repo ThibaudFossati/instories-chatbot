@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./theme-apple.css";
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -26,7 +31,10 @@ function App() {
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
       console.error("Erreur API:", err);
-      setMessages((prev) => [...prev, { role: "assistant", content: "Erreur de réponse." }]);
+      setMessages((prev) => [...prev, {
+        role: "assistant",
+        content: "⚠️ Erreur de réponse du bot."
+      }]);
     }
 
     setLoading(false);
@@ -35,17 +43,21 @@ function App() {
   return (
     <div className="chat-wrapper">
       {messages.map((msg, i) => (
-        <div
-          key={i}
-          className={`message ${msg.role === "user" ? "me" : "bot"}`}
-        >
+        <div key={i} className={`bubble ${msg.role}`}>
           {msg.content}
         </div>
       ))}
-      {loading && <div className="message bot">…</div>}
+      {loading && (
+        <div className="bubble assistant typing">
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+        </div>
+      )}
+      <div ref={messagesEndRef} />
       <input
         type="text"
-        placeholder="Écris quelque chose…"
+        placeholder="Écris ton message…"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
