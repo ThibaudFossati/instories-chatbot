@@ -260,3 +260,14 @@ body {
     opacity: 1;
   }
 }
+
+
+.logo {
+  display: block;
+  margin: 1rem auto 0.5rem;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 50%;
+  opacity: 0.9;
+}
