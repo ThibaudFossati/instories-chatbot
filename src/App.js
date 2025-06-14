@@ -11,11 +11,11 @@
     return;
   }import React, { useState, useEffect, useRef } from "react";
 import "./theme-apple.css";
-
+import IntroForm from "./components/IntroForm";
 const STORAGE_KEY = "instories-messages";
 
 function App() {
-  const [messages, setMessages] = useState(() => {
+  const [introDone, setIntroDone] = useState(false);  const [messages, setMessages] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved
       ? JSON.parse(saved)
