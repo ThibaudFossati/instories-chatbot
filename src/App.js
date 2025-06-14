@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
 
+function formatUserInput(text) {
+  const corrected = text
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/^(.)(.*)$/, (match, first, rest) => first.toUpperCase() + rest)
+    .replace(/(\s*[.?!])?$/, ".");
+  return corrected;
+}
 function App() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([{ sender: "bot", text: "Bonjour, je suis InStories — votre assistant créatif. Je peux vous guider, vous inspirer ou vous présenter notre travail en direction artistique. Que puis-je faire pour vous ?" }]);
@@ -8,7 +16,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setMessages((prev) => [...prev, { from: "user", text: input }]);
+    setMessages((prev) => [...prev, { from: "user", text: formatUserInput(input) }]);
     setInput("");
     try {
       const response = await fetch("/api/chat", {
