@@ -1,4 +1,31 @@
-:root {
+/* 🕓 Horodatage */
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* ➕ Bouton à gauche */
+.chat-input .plus {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  padding: 0 0.5rem;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Adaptation input + espacement Apple */
+.chat-body {
+  padding: 1rem;
+  gap: 1.2rem;
+}
+.bubble {
+  position: relative;
+  padding: 0.9rem 1.1rem;
+}:root {
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --bg: #f5f5f7;
   --bubble-bot: #e5e5ea;

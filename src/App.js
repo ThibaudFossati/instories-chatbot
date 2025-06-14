@@ -6,8 +6,18 @@ const STORAGE_KEY = "instories-messages";
 function App() {
   const [messages, setMessages] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            role: "assistant",
+            content:
+              "Bonjour, je suis **InStories**, votre assistant conversationnel dédié à la création haut de gamme. Posez-moi vos questions, je suis à votre écoute.",
+            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ];
   });
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -20,7 +30,9 @@ function App() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
+    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    const userMessage = { role: "user", content: input, timestamp: now };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
@@ -33,13 +45,20 @@ function App() {
       });
 
       const data = await res.json();
-      const botMessage = { role: "assistant", content: data.reply };
+      const botMessage = {
+        role: "assistant",
+        content: `${data.reply}\n\n— *InStories*`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      console.error("Erreur API:", err);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "⚠️ Erreur de réponse du bot." },
+        {
+          role: "system",
+          content: "⚠️ Une erreur est survenue. Veuillez réessayer.",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
       ]);
     }
 
@@ -48,7 +67,14 @@ function App() {
 
   const clearHistory = () => {
     localStorage.removeItem(STORAGE_KEY);
-    setMessages([]);
+    setMessages([
+      {
+        role: "assistant",
+        content:
+          "Bonjour, je suis **InStories**, votre assistant conversationnel dédié à la création haut de gamme. Posez-moi vos questions, je suis à votre écoute.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
   };
 
   return (
@@ -60,7 +86,8 @@ function App() {
       <div className="chat-body">
         {messages.map((msg, i) => (
           <div key={i} className={`bubble ${msg.role}`}>
-            {msg.content}
+            <div dangerouslySetInnerHTML={{ __html: msg.content }} />
+            {msg.timestamp && <span className="timestamp">{msg.timestamp}</span>}
           </div>
         ))}
         {loading && (
@@ -72,13 +99,16 @@ function App() {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <input
-        type="text"
-        placeholder="Écris ton message…"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-      />
+      <form className="chat-input" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
+        <button type="button" className="plus">+</button>
+        <input
+          type="text"
+          placeholder="Écrivez votre message…"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <button type="submit">➤</button>
+      </form>
     </div>
   );
 }
