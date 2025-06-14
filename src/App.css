@@ -143,3 +143,83 @@ body {
     color: #fff;
   }
 }
+
+
+
+/* Logo centré en avatar */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.logo-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+
+
+
+/* ——— BULLES DE CONVERSATION ——— */
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #888;
+  text-align: left;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.message-wrapper.user .label {
+  text-align: right;
+  color: #aaa;
+}
+
+.bubble {
+  position: relative;
+  padding: 14px 18px;
+  border-radius: 18px;
+  max-width: 75%;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: all 0.25s ease;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.bubble.bot {
+  align-self: flex-start;
+  background: rgba(240, 240, 240, 0.85);
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: #2a2a2a;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

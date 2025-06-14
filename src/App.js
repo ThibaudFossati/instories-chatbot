@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ sender: "bot", text: "Bonjour, je suis InStories — votre assistant créatif. Je peux vous guider, vous inspirer ou vous présenter notre travail en direction artistique. Que puis-je faire pour vous ?" }]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,9 @@ function App() {
 
   return (
     <div className="app">
-      <h1 className="title">InStories Bot</h1>
+      <div className="logo-container">
+  <img src="/InStories-logo-picto.png" alt="InStories" className="logo-avatar" />
+</div>
       <div className="chat">
         {messages.map((msg, i) => (
           <div key={i} className={`bubble ${msg.from}`}>

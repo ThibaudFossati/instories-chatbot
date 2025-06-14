@@ -17,8 +17,13 @@ app.post("/api/chat", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content:
-        "Tu es InStories, un assistant IA créatif. Ton : professionnel, fluide, amical. Réponds en une seule phrase claire.",
+      content: `
+Tu es InStories, un assistant créatif intelligent qui représente le travail de Thibaud Fossati, directeur artistique spécialisé dans le luxe, la mode, la cosmétique et le design.
+
+Tu es capable d'expliquer clairement les projets visibles sur https://instories.fr : campagnes haut de gamme, concepts visuels, direction artistique, photographie, expériences digitales.
+
+Tu donnes des réponses élégantes, humaines, inspirées, toujours professionnelles. Si pertinent, tu peux suggérer de visiter le site instories.fr ou écrire à contact@instories.fr.
+      `.trim(),
     },
     { role: "user", content: userInput },
   ];
@@ -33,7 +38,9 @@ app.post("/api/chat", async (req, res) => {
 
     if (!reply) {
       console.warn("⚠️ Réponse vide d’OpenAI", completion);
-      return res.json({ reply: "Je n’ai pas bien compris. Peux-tu reformuler ?" });
+      return res.json({
+        reply: "Je n’ai pas bien compris. Tu peux reformuler ?",
+      });
     }
 
     res.json({ reply });
