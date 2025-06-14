@@ -8,7 +8,6 @@
     };
     setMessages((prev) => [...prev, offerMsg]);
     setInput("");
-    return;
   }import React, { useState, useEffect, useRef } from "react";
 import "./theme-apple.css";
 import IntroForm from "./components/IntroForm";
