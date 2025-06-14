@@ -30,11 +30,11 @@ Après trois questions de l'utilisateur, suggère d'écrire à contact@instories
     },
   ];
 
-  // Si c’est la 4e interaction, forcer une réponse orientée contact
-  if (interactionCount > 3) {
+  // Si c’est la 10e interaction, forcer une réponse orientée contact
+  if (interactionCount > 10) {
     return res.json({
       reply:
-        "Je vous recommande d’écrire directement à contact@instories.fr pour aller plus loin. — *InStories*",
+        "Je vous recommande d’écrire directement à contact@instories.fr pour aller plus loin.",
     });
   }
 
