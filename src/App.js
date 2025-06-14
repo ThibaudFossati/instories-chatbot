@@ -114,3 +114,17 @@ function App() {
 }
 
 export default App;
+
+// 💬 Insertion au bon endroit dans la fonction sendMessage :
+const keywords = ["devis", "projet", "tarif", "coût", "prix", "estimation"];
+if (keywords.some((k) => input.toLowerCase().includes(k))) {
+  const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const offerMsg = {
+    role: "assistant",
+    content: "Nous créons des solutions IA sur mesure (images, vidéos). Pour un devis, envoyez un email à contact@instories.fr.",
+    timestamp: now,
+  };
+  setMessages((prev) => [...prev, offerMsg]);
+  setInput("");
+  return;
+}
