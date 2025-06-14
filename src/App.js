@@ -1,81 +1,48 @@
-  const keywords = ["devis", "projet", "tarif", "coût", "prix", "estimation"];
-  if (keywords.some((k) => input.toLowerCase().includes(k))) {
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const offerMsg = {
-      role: "assistant",
-      content: "Nous créons des solutions IA sur mesure (images, vidéos). Pour un devis, envoyez un email à contact@instories.fr.",
-      timestamp: now,
-    };
-    setMessages((prev) => [...prev, offerMsg]);
-    setInput("");
-  }import React, { useState, useEffect, useRef } from "react";
-import "./theme-apple.css";
-import IntroForm from "./components/IntroForm";
-const STORAGE_KEY = "instories-messages";
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [introDone, setIntroDone] = useState(false);  const [messages, setMessages] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved
-      ? JSON.parse(saved)
-      : [
-          {
-            role: "assistant",
-            content:
-              "Bonjour, je suis **InStories**, votre assistant conversationnel dédié à la création haut de gamme. Posez-moi vos questions, je suis à votre écoute.",
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          },
-        ];
-  });
-
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
-
-const sendMessage = async () => {
-  if (!input.trim()) return;
-
-  const keywords = ["devis", "projet", "tarif", "coût", "prix", "estimation"];
-  if (keywords.some((k) => input.toLowerCase().includes(k))) {
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const offerMsg = {
-      role: "assistant",
-      content: "Nous créons des solutions IA sur mesure (images, vidéos). Pour un devis, envoyez un email à contact@instories.fr.",
-      timestamp: now,
-    };
-    setMessages((prev) => [...prev, offerMsg]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setMessages((prev) => [...prev, { from: "user", text: input }]);
     setInput("");
-    return;
-  }
-
-  const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  const userMsg = {
-    role: "user",
-    content: input,
-    timestamp: now,
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      });
+      const data = await response.json();
+      setMessages((prev) => [...prev, { from: "bot", text: data.reply }]);
+    } catch (error) {
+      console.error("Erreur côté client:", error);
+    }
   };
-  setMessages((prev) => [...prev, userMsg]);
-  setInput("");
 
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
-    });
-    const data = await response.json();
-    const assistantMsg = {
-      role: "assistant",
-      content: data.reply,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
-    setMessages((prev) => [...prev, assistantMsg]);
-  } catch (error) {
-    console.error("Erreur côté client:", error);
-  }
-};
+  return (
+    <div className="app">
+      <h1 className="title">InStories Bot</h1>
+      <div className="chat">
+        {messages.map((msg, i) => (
+          <div key={i} className={`bubble ${msg.from}`}>
+            {msg.text}
+          </div>
+        ))}
+      </div>
+      <form className="input-bar" onSubmit={handleSubmit}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Écrivez ici…"
+        />
+        <button type="submit">➤</button>
+      </form>
+    </div>
+  );
+}
+
+export default App;
