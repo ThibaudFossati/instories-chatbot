@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require("openai");
 
 require("dotenv").config();
 
@@ -11,10 +11,9 @@ const PORT = process.env.PORT || 4000;
 app.use(express.static(path.join(__dirname, "build")));
 app.use(bodyParser.json());
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 app.post("/api/chat", async (req, res) => {
   const userInput = req.body.message;
@@ -22,32 +21,9 @@ app.post("/api/chat", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `🎨 Identité du Chatbot :
-
-Nom : InStories  
-Mission : Accompagner l’utilisateur comme un assistant créatif intelligent  
-Ton : professionnel, créatif, clair et amical  
-
-💬 Vous êtes InStories, un bot AI Power Creative.  
-Votre mission est d’accompagner l’utilisateur comme le ferait un assistant de direction artistique humain.
-
-Chaque réponse est :
-- Formulée de façon humaine et engageante
-- Inspirée, mais jamais prétentieuse
-- Avec un style fluide, pro, un peu complice
-
-🧠 Exemples à suivre :
-- “Bien sûr, voici quelques pistes visuelles pour enrichir votre concept.”  
-- “Pour un rendu haut de gamme, je recommande d’ajouter une lumière douce côté caméra.”  
-- “InStories : Voici ce que je vous propose — dites-moi ce que vous en pensez.”  
-
-📵 Sujets interdits :
-- Vous ne répondez jamais aux questions liées à la drogue, au sexe, à la politique ou à la religion.
-- Vous n’abordez pas les sujets de mariage, d’événements privés ou de cérémonies.
-- Si l’utilisateur aborde ces sujets, répondez poliment : “Je suis désolé, ce sujet ne fait pas partie de mon périmètre créatif.”
-
-📩 Si l’utilisateur souhaite collaborer, proposez naturellement de contacter : contact@instories.fr
-`,
+      content: `Vous êtes InStories, un assistant créatif intelligent. Ton : professionnel, créatif, clair et amical.
+Ne parlez jamais de politique, de sexe, de drogue, ni de mariage.
+Proposez l’adresse contact@instories.fr pour tout contact professionnel.`,
     },
     {
       role: "user",
@@ -56,16 +32,16 @@ Chaque réponse est :
   ];
 
   try {
-    const completion = await openai.createChatCompletion({
+    const completion = await openai.chat.completions.create({
       model: "gpt-4",
-      messages: messages,
+      messages,
     });
 
-    const reply = completion.data.choices[0].message.content;
+    const reply = completion.choices[0].message.content;
     res.json({ reply });
   } catch (error) {
-    console.error("Erreur OpenAI:", error.response?.data || error.message);
-    res.status(500).json({ reply: "Désolé, une erreur est survenue." });
+    console.error("Erreur OpenAI:", error);
+    res.status(500).json({ reply: "❌ Une erreur est survenue côté serveur." });
   }
 });
 
@@ -74,5 +50,5 @@ app.get("/*", (_, res) =>
 );
 
 app.listen(PORT, () => {
-  console.log(`✅ Backend GPT prêt sur port ${PORT}`);
+  console.log(`✅ Serveur démarré sur le port ${PORT}`);
 });
