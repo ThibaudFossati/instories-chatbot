@@ -40,9 +40,9 @@ function App() {
       <header><img src="/InStories-logo-picto.png" alt="InStories" className="logo" /></header>
       <div className="chat-box">
         {messages.map((message, index) => (
-          <div key={index} className={"message-wrapper " + message.sender}>
+          <div key={index} className={}>
             <div className="label">{message.sender === "bot" ? "InStories" : "Vous"}</div>
-            <div className={"bubble " + message.sender} dangerouslySetInnerHTML={{ __html: message.text }} />
+            <div className={} dangerouslySetInnerHTML={{ __html: message.text }} />
           </div>
         ))}
         {isTyping && (
