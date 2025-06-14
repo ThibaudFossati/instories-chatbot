@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const [isTyping, setIsTyping] = useState(false);
 import "./App.css";
 
 function formatUserInput(text) {
@@ -11,13 +12,16 @@ function formatUserInput(text) {
 }
 function App() {
   const [input, setInput] = useState("");
+const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([{ sender: "bot", text: "Bonjour, je suis InStories — votre assistant créatif. Je peux vous guider, vous inspirer ou vous présenter notre travail en direction artistique. Que puis-je faire pour vous ?" }]);
+const [isTyping, setIsTyping] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
     setMessages((prev) => [...prev, { from: "user", text: formatUserInput(input) }]);
     setInput("");
+  setIsTyping(true);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
