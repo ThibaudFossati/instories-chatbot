@@ -40,7 +40,7 @@ Après trois questions de l'utilisateur, suggère d'écrire à contact@instories
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-1106-preview",
+      model: "gpt-4.1-nano",
       messages: baseMessages,
     });
 
