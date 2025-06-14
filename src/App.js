@@ -38,104 +38,45 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-    const userMessage = { role: "user", content: input, timestamp: now };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
-      });
-
-      const data = await res.json();
-      const botMessage = {
-        role: "assistant",
-        content: `${data.reply}\n\n— *InStories*`,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      };
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "system",
-          content: "⚠️ Une erreur est survenue. Veuillez réessayer.",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        },
-      ]);
-    }
-
-    setLoading(false);
-  };
-
-  const clearHistory = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setMessages([
-      {
-        role: "assistant",
-        content:
-          "Bonjour, je suis **InStories**, votre assistant conversationnel dédié à la création haut de gamme. Posez-moi vos questions, je suis à votre écoute.",
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      },
-    ]);
-  };
-
-  return (
-    <div className="chat-wrapper">
-      <div className="chat-header">
-        <h1>Instories Chatbot</h1>
-        <button onClick={clearHistory}>🧽 Effacer</button>
-      </div>
-      <div className="chat-body">
-        {messages.map((msg, i) => (
-          <div key={i} className={`bubble ${msg.role}`}>
-            <div dangerouslySetInnerHTML={{ __html: msg.content }} />
-            {msg.timestamp && <span className="timestamp">{msg.timestamp}</span>}
-          </div>
-        ))}
-        {loading && (
-          <div className="bubble assistant typing">
-            <span className="dot"></span>
-            <span className="dot"></span>
-            <span className="dot"></span>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-      <form className="chat-input" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
-        <button type="button" className="plus">+</button>
-        <input
-          type="text"
-          placeholder="Écrivez votre message…"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button type="submit">➤</button>
-      </form>
-    </div>
-  );
-}
-
-export default App;
-
-// 💬 Insertion au bon endroit dans la fonction sendMessage :
-const keywords = ["devis", "projet", "tarif", "coût", "prix", "estimation"];
-if (keywords.some((k) => input.toLowerCase().includes(k))) {
-  const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  const offerMsg = {
-    role: "assistant",
-    content: "Nous créons des solutions IA sur mesure (images, vidéos). Pour un devis, envoyez un email à contact@instories.fr.",
-    timestamp: now,
-  };
-  setMessages((prev) => [...prev, offerMsg]);
-  setInput("");
-  return;
-}
+const sendMessage = async () => {n
+  if (!input.trim()) return;n
+n
+  const keywords = ["devis", "projet", "tarif", "coût", "prix", "estimation"];n
+  if (keywords.some((k) => input.toLowerCase().includes(k))) {n
+    const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });n
+    const offerMsg = {n
+      role: "assistant",n
+      content: "Nous créons des solutions IA sur mesure (images, vidéos). Pour un devis, envoyez un email à contact@instories.fr.",n
+      timestamp: now,n
+    };n
+    setMessages((prev) => [...prev, offerMsg]);n
+    setInput("");n
+    return;n
+  }n
+n
+  const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });n
+  const userMsg = {n
+    role: "user",n
+    content: input,n
+    timestamp: now,n
+  };n
+  setMessages((prev) => [...prev, userMsg]);n
+  setInput("");n
+n
+  try {n
+    const response = await fetch("/api/chat", {n
+      method: "POST",n
+      headers: { "Content-Type": "application/json" },n
+      body: JSON.stringify({ message: input }),n
+    });n
+    const data = await response.json();n
+    const assistantMsg = {n
+      role: "assistant",n
+      content: data.reply,n
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),n
+    };n
+    setMessages((prev) => [...prev, assistantMsg]);n
+  } catch (error) {n
+    console.error("Erreur côté client:", error);n
+  }n
+};
