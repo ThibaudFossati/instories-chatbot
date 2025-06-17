@@ -12,6 +12,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.get('/*', (req, res) => {
   res.sendFile(require("path").join(__dirname, "dist", "index.html"));
 
-app.listen(PORT, () =>
-  console.log(`🔗 InStories bot running on http://localhost:${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log(`🔗 InStories bot running on http://localhost:${PORT}`);
+});
