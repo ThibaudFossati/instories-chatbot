@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 10000;
 app.use(express.static(path.join(__dirname, 'dist')));
 
 /* Catch-all → index.html */
-app.get('*', (_, res) =>
+app.get('/*'*', (_, res) =>
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 );
 
