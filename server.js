@@ -9,8 +9,10 @@ const PORT = process.env.PORT || 4000;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.static(path.join(__dirname, "build")));
-\n// 🔗 Catch-all : renvoie toujours le bundle React\napp.get("*", (req, res) => res.sendFile(require("path").join(__dirname, "build", "index.html")));app.use(bodyParser.json());
-
+app.use(require("body-parser").json());
+app.get("*", (req, res) => {
+  res.sendFile(require("path").join(__dirname, "build", "index.html"));
+});
 app.post("/api/chat", async (req, res) => {
   const userInput = req.body.message;
 
@@ -47,7 +49,6 @@ Tu es InStories, un assistant conversationnel créatif augmenté par l’intelli
 });
 
 app.get("*", (_, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(PORT, () =>
