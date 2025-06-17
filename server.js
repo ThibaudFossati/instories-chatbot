@@ -11,8 +11,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 /* Catch-all → index.html */
 app.get('/*', (req, res) => {
   res.sendFile(require("path").join(__dirname, "dist", "index.html"));
-});  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-);
 
 app.listen(PORT, () =>
   console.log(`🔗 InStories bot running on http://localhost:${PORT}`)
