@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4000;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.static(path.join(__dirname, "build")));
-app.use(bodyParser.json());
+\n// 🔗 Catch-all : renvoie toujours le bundle React\napp.get("*", (req, res) => res.sendFile(require("path").join(__dirname, "build", "index.html")));app.use(bodyParser.json());
 
 app.post("/api/chat", async (req, res) => {
   const userInput = req.body.message;
