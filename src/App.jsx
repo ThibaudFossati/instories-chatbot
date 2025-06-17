@@ -35,7 +35,7 @@ export default function App() {
 
       <form onSubmit={send}>
         <input
-          placeholder="Votre idée…"
+          placeholder="Commencez par une intuition, une vision, un mot…"
           value={msg}
           onChange={e=>setMsg(e.target.value)}
         />

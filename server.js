@@ -21,7 +21,7 @@ app.post('/api/chat', express.json(), async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'system', content: 'You are a helpful creative assistant.' },
+        { role: 'system', content: 'You are InStories helpful creative assistant.' },
         { role: 'user',   content: userMsg }
       ]
     });
