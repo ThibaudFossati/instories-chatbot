@@ -74,3 +74,15 @@ button{
 @media (min-width: 1440px){
   .app{ background-size:300% 300%; }   /* moins zoomé sur très grand écran */
 }
+
+/* === Full-height infinite gradient ==================== */
+html{
+  background:radial-gradient(circle at 20% 20%,var(--c1),transparent 50%),
+             radial-gradient(circle at 70% 30%,var(--c2),transparent 60%),
+             radial-gradient(circle at 30% 80%,var(--c3),transparent 55%),
+             radial-gradient(circle at 80% 80%,var(--c4),transparent 65%);
+  background-size:400% 400%;
+  animation:bgShift 18s ease-in-out infinite;
+  background-attachment:fixed; /* ← clé : fixée au viewport */
+}
+body{margin:0;} /* sécurité */
