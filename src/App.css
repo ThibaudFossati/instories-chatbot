@@ -42,3 +42,35 @@ input{
 button{
   width:52px;height:52px;border:none;border-radius:50%;background:#000;color:#fff;
   font-weight:700;cursor:pointer;font-size:1.2rem}
+
+/* === Responsive gradient only ======================== */
+@media (max-width: 768px){
+  .app{ background-size:600% 600%; }   /* gradient plus large sur mobile */
+}
+@media (min-width: 1440px){
+  .app{ background-size:300% 300%; }   /* moins zoomé sur très grand écran */
+}
+
+/* === Responsive gradient only ======================== */
+@media (max-width: 768px){
+  .app{ background-size:600% 600%; }   /* gradient plus large sur mobile */
+}
+@media (min-width: 1440px){
+  .app{ background-size:300% 300%; }   /* moins zoomé sur très grand écran */
+}
+
+/* === Responsive gradient only ======================== */
+@media (max-width: 768px){
+  .app{ background-size:600% 600%; }   /* gradient plus large sur mobile */
+}
+@media (min-width: 1440px){
+  .app{ background-size:300% 300%; }   /* moins zoomé sur très grand écran */
+}
+
+/* === Responsive gradient only ======================== */
+@media (max-width: 768px){
+  .app{ background-size:600% 600%; }   /* gradient plus large sur mobile */
+}
+@media (min-width: 1440px){
+  .app{ background-size:300% 300%; }   /* moins zoomé sur très grand écran */
+}
