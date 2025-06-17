@@ -86,3 +86,13 @@ html{
   background-attachment:fixed; /* ← clé : fixée au viewport */
 }
 body{margin:0;} /* sécurité */
+
+/* === Logo centré ======================================= */
+.brand-logo{
+  width:160px;max-width:60vw;         /* adapte la taille */
+  height:auto;display:block;
+  margin:0 auto 1.5rem;               /* centre + espace dessous */
+}
+@media (max-width: 480px){
+  .brand-logo{width:120px;}           /* un peu plus petit en mobile étroit */
+}
