@@ -12,18 +12,43 @@ export default function App() {
     setHistory(h => [...h, { from:'user', txt: msg }]);
     setMsg('');
 
+
+
+
+
     try {
-      const r = await fetch('/api/chat', {
-        method : 'POST',
-        headers: { 'Content-Type':'application/json' },
-        body   : JSON.stringify({ message: msg })
-      });
-      const d = await r.json();
-      setHistory(h => [...h, { from:'bot', txt: d.reply }]);
-    } catch {
-      setHistory(h => [...h, { from:'bot', txt: '(erreur API)' }]);
-    }
-  }
+  /* --- bulle "..." pendant que l'API répond --- */
+  const typingId = crypto.randomUUID();
+  setHistory(h => [...h, { id: typingId, from: 'typing', txt: '' }]);
+
+  /* appel API inchangé */
+  const r = await fetch('/api/chat', {
+    method : 'POST',
+    headers: { 'Content-Type':'application/json' },
+    body   : JSON.stringify({ message: msg })
+  });
+  const d = await r.json();
+
+  /* --- on remplace la bulle "..." par la vraie réponse --- */
+  setHistory(h =>
+    h.filter(m => m.id !== typingId)      // retire "typing"
+     .concat({ from:'bot', txt: d.reply }) // ajoute la réponse
+  );
+  setHasFirstAnswer(true);
+
+} catch (err) {
+  /* en cas d'erreur : on retire "typing" et affiche un message */
+  setHistory(h =>
+    h.filter(m => m.id !== typingId)
+     .concat({ from:'bot', txt:'(erreur API)' })
+  );
+}
+
+
+
+
+
+
 
   return (
     <div className="app">
@@ -35,7 +60,7 @@ export default function App() {
 
       <form onSubmit={send}>
         <input
-          placeholder="Commencez par une intuition, une vision, un mot…"
+          placeholder="Votre demande…"
           value={msg}
           onChange={e=>setMsg(e.target.value)}
         />
