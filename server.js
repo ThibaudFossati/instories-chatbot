@@ -54,3 +54,8 @@ app.get("*", (_, res) => {
 app.listen(PORT, () =>
   console.log(`✅ InStories backend prêt sur http://localhost:${PORT}`)
 );
+
+/* Catch-all ▶ sert toujours le build React */
+app.get('*', (req, res) => {
+  res.sendFile(require('path').join(__dirname, 'build', 'index.html'));
+});
