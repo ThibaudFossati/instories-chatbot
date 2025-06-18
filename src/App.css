@@ -79,3 +79,40 @@ button{
   */
 }
 /* ==================================================================== */
+
+/* === Responsive tweaks <= 768px  ===================================== */
+@media (max-width: 768px){
+
+  /* wrapper général : moins de marge, espace vertical réduit */
+  .app{
+    padding:1.4rem .9rem;
+    gap:1.1rem;
+  }
+
+  /* logo plus petit */
+  .brand-logo{
+    width:110px;
+    margin-bottom:1rem;
+  }
+
+  /* bulles : texte légèrement réduit */
+  .talk p{
+    font-size:.94rem;
+    line-height:1.4;
+  }
+
+  /* input & bouton : compacts */
+  input{
+    padding:.65rem 1rem;
+    font-size:.94rem;
+  }
+  button{
+    width:44px;height:44px;font-size:1.05rem;
+  }
+
+  /* gradient déjà présent : agrandi sur mobile si voulu
+     (décommenter la ligne suivante si nécessaire)
+     html{ background-size:600% 600%; }
+  */
+}
+/* ==================================================================== */
