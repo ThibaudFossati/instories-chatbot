@@ -471,20 +471,16 @@ form{display:flex;gap:.6rem;margin-top:auto;padding-bottom:1rem;}
   align-self:flex-end;margin-left:auto;
   max-width:80%;
 }
-/* === THEME K · Flat Sunset =========================================== */
-body{font-family:"Segoe UI",system-ui,sans-serif;color:#fff;}
-.talk .bot{
-  background:rgba(255,255,255,.15);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.3);border-radius:18px;
-  padding:1rem 1.3rem;max-width:78%;
+/* === THEME M · Ice Mint ============================================== */
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#03314b;}
+.talk .bot,.talk .user{
+  background:rgba(255,255,255,.22);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.38);border-radius:18px;
+  padding:.95rem 1.3rem;max-width:82%;
 }
-.talk .user{
-  background:linear-gradient(135deg,#ff8e53 0%,#f72585 100%);
-  border:none;border-radius:18px;padding:1rem 1.3rem;max-width:78%;
-}
+.talk .user{background:rgba(165,243,252,.28);}
 button{
-  width:52px;height:52px;border:none;border-radius:50%;
-  background:linear-gradient(135deg,#f72585 0%,#7209b7 100%);
-  color:#fff;font-size:1.4rem;cursor:pointer;
+  width:54px;height:54px;border:none;border-radius:50%;
+  background:#5eead4;color:#03314b;font-size:1.4rem;cursor:pointer;
 }
-button:hover{filter:brightness(1.2)}
+button:hover{filter:brightness(1.15)}
