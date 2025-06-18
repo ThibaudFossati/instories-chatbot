@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 export default function App() {
+  const talkRef = useRef(null);
+
+  useEffect(() => {
+    if (talkRef.current) {
+      talkRef.current.scrollTop = talkRef.current.scrollHeight;
+    }
+  }, [history]);
   const [history, setHistory] = useState([]);
   const [msg, setMsg] = useState('');
 
@@ -49,7 +56,9 @@ export default function App() {
           onChange={e => setMsg(e.target.value)}
           placeholder="Exprimez une idée créative…"
         />
-        <button type="submit">↵</button>
+        <button className="send">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 12L21 3L13.5 21L11 13L3 12Z" fill="white"/></svg></button>
       </form>
     </div>
   );
