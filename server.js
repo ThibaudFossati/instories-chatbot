@@ -51,8 +51,13 @@ PS : Tu ne travailles pas le 14 juillet. Préviens-le avec grâce.
       ]
     });
 
-    // ✂️ Limite stricte à 367 caractères côté serveur
-    const reply = completion.choices[0].message.content.trim().slice(0, 367);
+    // 🌿 Limite à 60 mots maximum, ajout de '…' si coupé
+    const fullReply = completion.choices[0].message.content.trim();
+    const words = fullReply.split(/\s+/);
+    const reply = words
+      .slice(0, 60)
+      .join(' ')
+      + (words.length > 60 ? '…' : '');
 
     res.json({ reply });
   } catch (err) {
