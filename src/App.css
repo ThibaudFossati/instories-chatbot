@@ -47,3 +47,14 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
+
+/* === MOBILE FONT-SIZE BEGIN === */
+@media (max-width: 600px) {
+  body {
+    font-size: 16px !important;
+  }
+  input, button {
+    font-size: 16px !important;
+  }
+}
+/* === MOBILE FONT-SIZE END === */
