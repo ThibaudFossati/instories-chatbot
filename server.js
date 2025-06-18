@@ -18,7 +18,7 @@ app.post('/api/chat', express.json(), async (req, res) => {
   try {
     const userMsg = req.body.message || '';
     const completion = await openai.chat.completions.create({
-      model: 'GPT‑4o',
+      model: 'gpt-4o', // ✅ nom exact et valide
       messages: [
         {
           role: 'system',
