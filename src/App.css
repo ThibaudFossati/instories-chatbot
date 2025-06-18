@@ -58,3 +58,19 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
   }
 }
 /* === MOBILE FONT-SIZE END === */
+/* === RESPONSIVE LAYOUT BEGIN === */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+.app {
+  width: 100%;
+  max-width: 1080px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+/* === RESPONSIVE LAYOUT END === */
