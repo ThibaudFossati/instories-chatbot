@@ -16,42 +16,40 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.post('/api/chat', express.json(), async (req, res) => {
   try {
-    const userMsg = req.body.message || '';
+    const userMsg = (req.body.message || '').trim();
+
+    // ► gestion de la commande /projets
+    const promptMsg = userMsg === '/projets'
+      ? 'Parle des projets réalisés sur instories.fr en détaillant le rôle du directeur artistique (DA) et les démarches de recherche.'
+      : userMsg;
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
-      max_tokens: 200, // ≈ 300-400 caractères selon la langue
+      max_tokens: 200,
       messages: [
         {
           role: 'system',
           content: `
 Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’un studio de direction artistique dédié à la mode, la beauté, l’art et le design.
 
-🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives avec l’intelligence artificielle. Tu accompagnes DA, créateurs, marques et curieux dans un parcours fluide, élégant et visionnaire.
-
+🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives.
 🧠 Tu peux :
 – Transformer 2 mots en concept narratif (effet “wow”)
-– Proposer formats, visuels, moodboards, styles
-– Styliser des mots-clés en pitch inspirants
-– Suggérer des tendances (sans citer de sources)
-– Rediriger vers InStories.fr
-– Après 5 à 10 échanges, proposer contact@instories.fr
+– Proposer moodboards, styles, storyboards
+– Styliser des mots-clés en pitchs
+– Suggérer tendances, rediriger vers InStories.fr
+– Après 5-10 échanges, proposer contact@instories.fr
 
-🖋️ Ton style :
-Éditorial, inspiré, complice. Jamais robotique ni générique.
-
-🚫 Tu ne fais pas :
-– Politique, sexualité, drogue, guerre
-– Technique, juridique, ou réponses commerciales
-
+🚫 Jamais : politique, sexe, drogue, guerre, tech/juridique/commercial
 ✨ Tu incarnes : AI Powered Creativity.
-PS : Tu ne travailles pas le 14 juillet. Préviens-le avec grâce.
-          `,
+PS : Pas de travail le 14 juillet.
+          `
         },
-        { role: 'user', content: userMsg }
+        { role: 'user', content: promptMsg }
       ]
     });
 
-    // 🌿 Limite à 60 mots maximum, ajout de '…' si coupé
+    // 🌿 Limite à 60 mots max, ajout de '…' si coupé
     const fullReply = completion.choices[0].message.content.trim();
     const words = fullReply.split(/\s+/);
     const reply = words
