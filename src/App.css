@@ -47,3 +47,11 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
+/* === AUTO ALIGN BOT BEGIN === */
+.talk .bot {
+  align-self: flex-start !important;  /* toujours à gauche */
+}
+.talk .user {
+  align-self: flex-end !important;    /* toujours à droite */
+}
+/* === AUTO ALIGN BOT END === */
