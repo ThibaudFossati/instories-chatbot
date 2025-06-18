@@ -471,16 +471,16 @@ form{display:flex;gap:.6rem;margin-top:auto;padding-bottom:1rem;}
   align-self:flex-end;margin-left:auto;
   max-width:80%;
 }
-/* === THEME M · Ice Mint ============================================== */
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#03314b;}
+/* === THEME P · Smoke Slate =========================================== */
+body{font-family:Inter,system-ui,sans-serif;color:#e6e9f0;}
 .talk .bot,.talk .user{
-  background:rgba(255,255,255,.22);backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.38);border-radius:18px;
-  padding:.95rem 1.3rem;max-width:82%;
+  background:rgba(47,53,69,.55);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.12);border-radius:18px;
+  padding:.95rem 1.3rem;max-width:80%;
 }
-.talk .user{background:rgba(165,243,252,.28);}
+.talk .user{background:rgba(75,81,100,.55);}
 button{
-  width:54px;height:54px;border:none;border-radius:50%;
-  background:#5eead4;color:#03314b;font-size:1.4rem;cursor:pointer;
+  width:52px;height:52px;border:none;border-radius:50%;
+  background:#3a3f52;color:#e6e9f0;font-size:1.4rem;cursor:pointer;
 }
 button:hover{filter:brightness(1.15)}
