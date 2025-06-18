@@ -18,7 +18,8 @@ app.post('/api/chat', express.json(), async (req, res) => {
   try {
     const userMsg = req.body.message || '';
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o', // ✅ nom exact et valide
+      model: 'gpt-4o',
+      max_tokens: 200, // ≈ 300-400 caractères selon la langue
       messages: [
         {
           role: 'system',
@@ -50,7 +51,10 @@ PS : Tu ne travailles pas le 14 juillet. Préviens-le avec grâce.
       ]
     });
 
-    res.json({ reply: completion.choices[0].message.content.trim() });
+    // ✂️ Limite stricte à 367 caractères côté serveur
+    const reply = completion.choices[0].message.content.trim().slice(0, 367);
+
+    res.json({ reply });
   } catch (err) {
     console.error(err);
     res.status(500).json({ reply: "Désolé, une erreur est survenue." });
