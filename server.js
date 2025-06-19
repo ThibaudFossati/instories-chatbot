@@ -19,7 +19,7 @@ app.post('/api/chat', express.json(), async (req, res) => {
     const userMsg = (req.body.message || '').trim();
 
     // ► gestion de la commande /projets
-    const promptMsg = userMsg === '/projets'
+    const promptMsg = userMsg === '/projets, travaux,réalisation'
       ? 'Parle des projets réalisés sur instories.fr en détaillant le rôle du directeur artistique (DA) et les démarches de recherche.'
       : userMsg;
 

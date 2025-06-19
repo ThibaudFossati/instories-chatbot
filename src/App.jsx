@@ -53,7 +53,7 @@ export default function App() {
           onChange={e => setMsg(e.target.value)}
         />
         <button type="submit">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <svg   fill="none" viewBox="0 0 24 24">
             <path d="M3 12L21 3L13.5 21L11 13L3 12Z" fill="#fff" />
           </svg>
         </button>
