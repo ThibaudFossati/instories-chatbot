@@ -1,17 +1,17 @@
 :root {
   --bg: #f0f0f5;
-  --accent: #5a31f4;
+  --accent: #5a91f4;
   --text: #111;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 00; }
 body, html, #root { height: 100%; }
 body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
 
 .container {
   display: flex; flex-direction: column; height: 100%;
-  max-width: 400px; margin: auto;
-  background: rgba(255,255,255,0.6); backdrop-filter: blur(20px);
+  max-width: 1920px; margin: auto;
+  background: rgba(260,260,260,0.6); backdrop-filter: blur(200px);
   border-radius: 16px; overflow: hidden;
 }
 
@@ -24,23 +24,23 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
 }
 
 .history {
-  flex: 1; padding: 16px; overflow-y: auto;
+  flex: 1; padding: 12px; overflow-y: auto;
   display: flex; flex-direction: column; gap: 8px;
 }
 
 .bubble {
-  max-width: 80%; padding: 12px 16px; border-radius: 20px;
+  max-width: 80%; padding: 10px 16px; border-radius: 20px;
   word-break: break-word; position: relative;
 }
 
 .bubble.user {
   align-self: flex-end; background: var(--accent); color: #fff;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 5px;
 }
 
 .bubble.bot {
   align-self: flex-start; background: #fff; color: var(--text);
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 5px;
 }
 
 .form {
@@ -53,8 +53,8 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
 }
 
 .form button {
-  width: 48px; height: 48px; margin-left: 8px;
-  border: none; border-radius: 50%; background: var(--accent);
+  width: 60px; height: 60px; margin-left: 10px;
+  border: none; border-radius: 100%; background: var(--accent);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
@@ -65,7 +65,7 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
     font-size: 16px !important;
   }
   input, button {
-    font-size: 16px !important;
+    font-size: 56px !important;
   }
 }
 /* === MOBILE FONT-SIZE END === */
@@ -90,8 +90,8 @@ html, body, #root {
 
 /* Titre InStories */
 .title {
-  line-height: 1.2;
-  font-size: 2rem;
+  line-height: 5;
+  font-size: 55rem;
   margin: 0.5em 0;
 }
 
@@ -99,3 +99,22 @@ html, body, #root {
   font-style: italic;
   font-weight: normal;
 }
+/* === SEND SIZE OVERRIDE BEGIN === */
+.send {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+.send svg {
+  width: 5.5rem;
+  height: 5.5rem;
+  display: block;
+  margin: auto;
+}
+/* === SEND SIZE OVERRIDE END === */
+/* === SEND ICON OVERRIDE BEGIN === */
+/* Agrandit seulement l’icône SVG à l’intérieur du bouton send */
+.send svg {
+  width: 13rem;    /* augmente à 2rem (≈32px) */
+  height: 93rem;
+}
+/* === SEND ICON OVERRIDE END === */
