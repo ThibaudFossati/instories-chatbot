@@ -12,6 +12,13 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 10000;
 
+
+// — Allow embedding on instories.fr & squarespace —
+app.use((req, res, next) => {
+  res.removeHeader("X-Frame-Options");
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com");
+  next();
+});
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.post('/api/chat', express.json(), async (req, res) => {
