@@ -60,7 +60,7 @@ body { font-family: -apple-system,system-ui,sans-serif; background: var(--bg); }
 }
 
 /* === MOBILE FONT-SIZE BEGIN === */
-@media (max-width: 300px) {
+@media (max-width: 100px) {
   body {
     font-size: 16px !important;
   }
