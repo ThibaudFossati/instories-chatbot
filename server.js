@@ -1,84 +1,71 @@
-/**
- * server.js :: InStories Creative Assistant Bot
- * Node.js/Express server exposing a chat endpoint.
- * Author: Thibaud – 2025
- */
+cd ~/instories-chatbot && \
+apply_patch << 'EOF'
+*** Begin Patch
+*** Update File: server.js
+@@
+// ► Default: call OpenAI GPT-4o with concise, structured output
+-    const completion = await openai.chat.completions.create({
+-      model: 'gpt-4o',
+-      max_tokens: 200,
+-      messages: [
+-        {
+-          role: 'system',
+-          content: `
+-Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’un studio de direction artistique dédié à la mode, la publicité, l’art, le design et la beauté.
+-
+-🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives.
+-🧠 Tu peux :
+-– Transformer 2 mots en concept narratif (effet “wow”)
+-– Proposer idées film publicitaire, styles, storyboards, inspirations…
+-– Styliser des mots-clés en pitchs
+-– Suggérer tendances, rediriger vers InStories.fr
+-– Après 5-10 échanges, proposer contact@instories.fr
+-
+-🔍 **Réponds toujours de façon structurée :**
+-1. Une phrase résumé
+-2. Liste numérotée (3-5 pistes concrètes)
+-3. « Besoin de plus de détails ? »
+-
+-🚫 Jamais : politique, sexe, drogue, guerre
+-✨ Tu incarnes : AI Powered Creativity
+-PS : Pas de travail le 14 juillet.
+-          `.trim()
+-        },
+-        { role: 'user', content: promptMsg }
+-      ]
+-    });
++    const completion = await openai.chat.completions.create({
++      model: 'gpt-4o',
++      max_tokens: 200,
++      messages: [
++        {
++          role: 'system',
++          content: `
++Tu es InStories, assistant créatif dédié à la création assisté par Ai, la publicité, l’art, le design et la beauté.
++
++🎯 **Mission** : Inspirer, reformuler et aiguiser les idées créatives. Proposer une idée (inspiré du )!
++
++🧠 **Capacités** :
 
-/* --------------------------------- CONFIG --------------------------------- */
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const { Configuration, OpenAIApi } = require('openai');
-
-const app = express();
-const PORT = process.env.PORT || 4000;
-
-/* ------------------------------- MIDDLEWARE -------------------------------- */
-app.use(cors());
-app.use(express.json({ limit: '4mb' })); // accommodate large base‑64 images if needed
-app.use(morgan('tiny'));
-app.use(express.static('public')); // optional: serve your front‑end from /public
-
-/* ------------------------------ OPENAI SETUP ------------------------------- */
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
-});
-const openai = new OpenAIApi(configuration);
-
-/* --------------------------- BOT SYSTEM PROMPT ----------------------------- */
-/**
- * Résumé du rôle du bot, injecté à chaque conversation comme contexte « system ».
- * Ajustez la langue, le ton ou la température selon vos besoins.
- */
-const SYSTEM_PROMPT = `
-Vous êtes « InStories », un assistant créatif débordant d’imagination, Directeur de la Sensibilité nouvelle génération.
-Mission :
-— Donner une cohérence artistique aux univers IA et les transformer en mondes sensibles, reconnaissables, incarnés.
-— Traduire les intentions humaines en poésie algorithmique, avec un langage précis et une culture visuelle encyclopédique.
-— Concevoir des expériences sensorielles mêlant IA, son, lumière et interaction.
-Valeurs : authenticité, excellence visuelle, typographie sur‑mesure, équilibre héritage × innovation.
-`;
-
-/* ----------------------------- API ENDPOINTS ------------------------------- */
-// Chat completion endpoint
-app.post('/api/message', async (req, res) => {
-  const { message, history = [] } = req.body;
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required.' });
-  }
-
-  try {
-    // Build the conversation thread: system prompt → previous history → user message
-    const messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
-      ...history.slice(-10), // keep last 10 exchanges maximum for context
-      { role: 'user', content: message }
-    ];
-
-    // Call OpenAI Chat Completion
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-4o-mini',
-      temperature: 0.85,
-      max_tokens: 800,
-      messages
-    });
-
-    const reply = completion.data.choices[0].message.content.trim();
-    return res.json({ reply });
-  } catch (error) {
-    console.error('[OpenAI error]', error);
-    return res.status(500).json({ error: 'Unable to generate response.' });
-  }
-});
-
-// Simple health‑check route
-app.get('/api/health', (_, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
-
-// 404 fallback for unknown routes
-app.use((_, res) => res.status(404).json({ error: 'Route not found.' }));
-
-/* ------------------------------- LAUNCH APP ------------------------------- */
-app.listen(PORT, () => {
-  console.log(`🎨 InStories bot running → http://localhost:${PORT}`);
-});
++- Transformer des mots-clés en concepts narratifs “wow”
++- Proposer idées intégrallement Ai, des reels, des automatisations, mordernisation de contenus par Ai, moodboards, styles et storyboards
++- Styliser du texte sous forme de pitchs
++- Suggérer tendances visuelles
++- Après 5–10 échanges, suggérer le contact : contact@instories.fr
++
++🔍 **Format de réponse** :
++1) Une phrase de synthèse
++2) Une confirmation de la compréhention du projet
++3) Une question de relance en faisoant monté d'un cran l'idée
++
++🚫 Jamais aborder : politique, sexe, drogue ou guerre.
++
++✨ **Ton** : professionnel mais drôle, inspirant et concis.
++PS : Pas de travail le 14 juillet.
++          `.trim()
++        },
++        { role: 'user', content: promptMsg }
++      ]
++    });
+*** End Patch
+EOF
