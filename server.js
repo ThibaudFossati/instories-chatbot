@@ -12,105 +12,110 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 10000;
 
-// — Allow embedding on instories.fr & squarespace —
+/* ------------------------------------------------------------------ */
+/*  Mémoire de session (simple Map)                                   */
+/* ------------------------------------------------------------------ */
+const sessionHistories = new Map();      // { sessionId: [ {role, content}, … ] }
+const MAX_TURNS = 10;                    // on garde les 10 derniers échanges
+
+function addToHistory(sessionId, role, content) {
+  const hist = sessionHistories.get(sessionId) || [];
+  hist.push({ role, content });
+  // on tronque le tableau aux MAX_TURNS * 2 messages (user+assistant)
+  if (hist.length > MAX_TURNS * 2) hist.splice(0, hist.length - MAX_TURNS * 2);
+  sessionHistories.set(sessionId, hist);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Sécurité iframe + fichiers statiques                              */
+/* ------------------------------------------------------------------ */
 app.use((req, res, next) => {
-  res.removeHeader("X-Frame-Options");
+  res.removeHeader('X-Frame-Options');
   res.setHeader(
-    "Content-Security-Policy",
+    'Content-Security-Policy',
     "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com"
   );
   next();
 });
-
-// — Serve static build files —
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// — Chat API endpoint —
+/* ------------------------------------------------------------------ */
+/*  Endpoint /api/chat                                                */
+/* ------------------------------------------------------------------ */
 app.post('/api/chat', express.json(), async (req, res) => {
   try {
-    const userMsg = (req.body.message || '').trim();
+    const userMsg   = (req.body.message || '').trim();
+    const sessionId = req.body.sessionId || req.ip; // id envoyé par le front ou IP
 
-    // ► Career-bio shortcut
+    /* ---------- Raccourci BIO ------------------------------------ */
     if (/carrière|parcours|expérience|présente toi|qui es[- ]?tu/i.test(userMsg)) {
-      const careerBio = `
-Thibaud – DA Luxe, AI Artist & Social Media Expert
-Paris – Indépendant | instories.fr
-
-Bonjour,
-Thibaud est expert de la création digitale et pour les marques,il combine design, narration visuelle et technologies pour repousser les limites du possible. Spécialisé en social media, je développe des contenus en explorant l’IA générative et la programmation créative à travers l’approche traditionnelle du métier.
-
-Thibaud maîtrise ComfyUI, ControlNet, MidJourney, Auto1111, et la programmation créative (React, terminal Mac).
-+10 ans en agences (TBWA, Publicis, BBDO…), projets pour L’Oréal, Shiseido, Nespresso, Salomon…
-
-Services clés :
-• IA Générative
-• Social Media & motion design
-• UX/UI & branding
-• Communication FR/EN
-
-Merci pour votre attention !
-      `.trim();
-      return res.json({ reply: careerBio });
+      const bio = `Thibaud – DA Luxe, AI Artist & Social Media Expert\nParis – Indépendant | instories.fr\n\n…`;
+      return res.json({ reply: bio });
     }
 
-    // ► /analyze command for client-brief analysis
+    /* ---------- /analyze <brief> --------------------------------- */
     if (userMsg.toLowerCase().startsWith('/analyze ')) {
       const brief = userMsg.slice(9).trim();
       const analysis = await openai.chat.completions.create({
         model: 'gpt-4o',
-        max_tokens: 500,
         messages: [
-          { role: 'system', content: `
-Tu es InStories bot, assistant créatif expert. Celui qui sculptent l’émotion dans l’abondance générée.
-
-	•	Rôle : donner une cohérence artistique aux outputs IA, créer des mondes reconnaissables, sensibles, incarnés.
-	•	Outils : IA génératives + direction manuelle (narration spatiale, Worflows ComfyUi, Auto 1111, color grading, typographie, programmes react etc..).
-	•	Compétence clé : le goût + le discernement + l’intuition du moment juste (très important).
-          `.trim() },
+          { role: 'system',
+            content: `Tu es InStories bot, assistant créatif expert…` },
           { role: 'user', content: brief }
         ]
       });
       return res.json({ reply: analysis.choices[0].message.content.trim() });
     }
 
-    // ► /projets shortcut
-    const promptMsg = userMsg === '/projets, travaux,réalisation'
-      ? 'Parle des projets réalisés sur instories.fr en détaillant le rôle du directeur artistique (DA) et les démarches de recherche.'
-      : userMsg;
+    /* ---------- /projets ----------------------------------------- */
+    const promptMsg =
+      userMsg === '/projets, travaux,réalisation'
+        ? 'L’IA décrira vos réalisations sur instories.fr'
+        : userMsg;
 
-    // ► Default: call OpenAI GPT-4o with concise, structured output
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 200,
-      messages: [
-        { role: 'system', content: `
+    /* ---------- Historique + prompt par défaut ------------------- */
+    const systemPrompt = `
 Tu es InStories, assistant créatif dédié à la mode, la publicité, l’art, le design et la beauté.
 
 🎯 Mission : Inspirer, reformuler et aiguiser les idées créatives.
-.
-        `.trim() },
-        { role: 'user', content: promptMsg }
-      ]
+(aucune limite de tokens, réponse complète.)`.trim();
+
+    // Construit l’historique pour OpenAI
+    const history = sessionHistories.get(sessionId) || [];
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...history,
+      { role: 'user', content: promptMsg }
+    ];
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages            // ⬅︎ PAS de max_tokens → réponse complète
     });
 
-    // 🌿 Tronquer la réponse à 60 mots max
-    const fullReply = completion.choices[0].message.content.trim();
-    const words = fullReply.split(/\s+/);
-    const reply = words.slice(0, 60).join(' ') + (words.length > 60 ? '…' : '');
-    res.json({ reply });
+    const reply = completion.choices[0].message.content.trim();
 
+    // Met à jour la mémoire
+    addToHistory(sessionId, 'user', promptMsg);
+    addToHistory(sessionId, 'assistant', reply);
+
+    res.json({ reply });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ reply: "Désolé, une erreur est survenue." });
+    res.status(500).json({ reply: 'Désolé, une erreur est survenue.' });
   }
 });
 
-// — Catch-all for client-side routing —
+/* ------------------------------------------------------------------ */
+/*  SPA fallback                                                      */
+/* ------------------------------------------------------------------ */
 app.get('/*', (req, res) =>
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 );
 
-// — Start server —
+/* ------------------------------------------------------------------ */
+/*  Démarrage                                                         */
+/* ------------------------------------------------------------------ */
 app.listen(PORT, () =>
   console.log(`🔗 InStories bot running on http://localhost:${PORT}`)
 );
