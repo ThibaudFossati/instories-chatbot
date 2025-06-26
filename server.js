@@ -25,8 +25,7 @@ apply_patch << 'EOF'
 -    });
 +    const completion = await openai.chat.completions.create({
 +      model: 'gpt-4o',
-+      max_tokens: 200,
-+      messages: [
++      +      messages: [
 +        {
 +          role: 'system',
 +          content: `
