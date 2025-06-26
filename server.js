@@ -1,147 +1,84 @@
-// server.js
-import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import dotenv from 'dotenv'
-import OpenAI from 'openai'
+/**
+ * server.js :: InStories Creative Assistant Bot
+ * Node.js/Express server exposing a chat endpoint.
+ * Author: Thibaud – 2025
+ */
 
-dotenv.config()
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+/* --------------------------------- CONFIG --------------------------------- */
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const { Configuration, OpenAIApi } = require('openai');
 
-const app = express()
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const PORT = process.env.PORT || 10000
+const app = express();
+const PORT = process.env.PORT || 4000;
 
-// — Personae definitions —
-const PERSONAS = {
-  muse: `
-Vous êtes la « Creative Muse » d’InStories :
-• Votre ton est poétique, imagé, un brin onirique
-• Vous jouez avec les métaphores pour inspirer
-• Vous proposez 3 images mentales, 2 titres évocateurs
-`,
-  guru: `
-Vous êtes le « Design Guru » d’InStories :
-• Votre ton est clair, méthodique, structuré
-• Vous donnez 1 phrase de cadre + 4 étapes précises
-• Vous terminez par “Quelle étape souhaitez-vous creuser ?”
-`,
-  weaver: `
-Vous êtes le « Story Weaver » d’InStories :
-• Votre ton est narratif, immersif, accrocheur
-• Vous racontez un mini-scénario en 3 actes
-• Vous concluez par une question ouverte invitant à continuer
-`
-}
+/* ------------------------------- MIDDLEWARE -------------------------------- */
+app.use(cors());
+app.use(express.json({ limit: '4mb' })); // accommodate large base‑64 images if needed
+app.use(morgan('tiny'));
+app.use(express.static('public')); // optional: serve your front‑end from /public
 
-// — Allow embedding on instories.fr & squarespace —
-app.use((req, res, next) => {
-  res.removeHeader("X-Frame-Options")
-  res.setHeader(
-    "Content-Security-Policy",
-    "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com"
-  )
-  next()
-})
+/* ------------------------------ OPENAI SETUP ------------------------------- */
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY
+});
+const openai = new OpenAIApi(configuration);
 
-// — Serve static build files —
-app.use(express.static(path.join(__dirname, 'dist')))
+/* --------------------------- BOT SYSTEM PROMPT ----------------------------- */
+/**
+ * Résumé du rôle du bot, injecté à chaque conversation comme contexte « system ».
+ * Ajustez la langue, le ton ou la température selon vos besoins.
+ */
+const SYSTEM_PROMPT = `
+Vous êtes « InStories », un assistant créatif débordant d’imagination, Directeur de la Sensibilité nouvelle génération.
+Mission :
+— Donner une cohérence artistique aux univers IA et les transformer en mondes sensibles, reconnaissables, incarnés.
+— Traduire les intentions humaines en poésie algorithmique, avec un langage précis et une culture visuelle encyclopédique.
+— Concevoir des expériences sensorielles mêlant IA, son, lumière et interaction.
+Valeurs : authenticité, excellence visuelle, typographie sur‑mesure, équilibre héritage × innovation.
+`;
 
-// — Chat API endpoint —
-app.post('/api/chat', express.json(), async (req, res) => {
-  try {
-    let userMsg = (req.body.message || '').trim()
-    let personaKey
-
-    // ► Persona switch
-    if (userMsg.toLowerCase().startsWith('/persona ')) {
-      personaKey = userMsg.split(' ')[1]?.toLowerCase()
-      if (PERSONAS[personaKey]) {
-        return res.json({
-          reply: `✅ Mode **${personaKey}** activé ! Je suis votre ${personaKey === 'muse' ? 'Creative Muse' : personaKey === 'guru' ? 'Design Guru' : 'Story Weaver'}.`
-        })
-      } else {
-        return res.json({
-          reply: "❌ Persona inconnue. Choisissez `/persona muse`, `/persona guru` ou `/persona weaver`."
-        })
-      }
-    }
-
-    // ► Récupérer la persona courante (stockée côté client ou par défaut aléatoire)
-    // Pour cet exemple on choisit aléatoirement si non définie
-    if (!personaKey) {
-      personaKey = ['muse','guru','weaver'][Math.floor(Math.random()*3)]
-    }
-    const personaPrompt = PERSONAS[personaKey]
-
-    // ► Career-bio shortcut
-    if (/carrièr|parcours|expérience|présente toi|qui es[- ]?tu/i.test(userMsg)) {
-      const bio = `
-Thibaud – DA Luxe, AI Artist & Social Media Expert
-Paris – Indépendant | instories.fr
-
-Passionné par la création digitale… (etc.)
-      `.trim()
-      return res.json({ reply: bio })
-    }
-
-    // ► /analyze brief
-    if (userMsg.toLowerCase().startsWith('/analyze ')) {
-      const brief = userMsg.slice(9).trim()
-      const analysis = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        max_tokens: 300,
-        messages: [
-          { role:'system', content: personaPrompt },
-          { role:'system', content: `
-Vous êtes InStories, assistant créatif expert.
-Analysez ce brief client, en extrayez les points clés,
-posez les bonnes questions et proposez trois axes stratégiques.
-          `.trim() },
-          { role:'user', content: brief }
-        ]
-      })
-      return res.json({ reply: analysis.choices[0].message.content.trim() })
-    }
-
-    // ► /projets shortcut
-    const promptMsg = userMsg === '/projets, travaux,réalisation'
-      ? 'Parle des projets réalisés sur instories.fr…'
-      : userMsg
-
-    // ► Default GPT-4o call with persona
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 200,
-      messages: [
-        { role:'system', content: personaPrompt },
-        { role:'system', content: `
-Vous êtes InStories, éclaireur numérique sensible…
-Mission : inspirer, reformuler, etc. (format structuré)
-        `.trim() },
-        { role:'user', content: promptMsg }
-      ]
-    })
-
-    // 🌿 Tronquer à 60 mots
-    const full = completion.choices[0].message.content.trim()
-    const words = full.split(/\s+/)
-    const reply = words.slice(0,60).join(' ') + (words.length>60?'…':'')
-
-    res.json({ reply })
-
-  } catch(err) {
-    console.error(err)
-    res.status(500).json({ reply:"Désolé, une erreur est survenue." })
+/* ----------------------------- API ENDPOINTS ------------------------------- */
+// Chat completion endpoint
+app.post('/api/message', async (req, res) => {
+  const { message, history = [] } = req.body;
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' });
   }
-})
 
-// — Catch-all for client-side routing —
-app.get('/*', (req,res) =>
-  res.sendFile(path.join(__dirname,'dist','index.html'))
-)
+  try {
+    // Build the conversation thread: system prompt → previous history → user message
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...history.slice(-10), // keep last 10 exchanges maximum for context
+      { role: 'user', content: message }
+    ];
 
-// — Start server —
-app.listen(PORT, () =>
-  console.log(`🔗 InStories bot running on http://localhost:${PORT}`)
-)
+    // Call OpenAI Chat Completion
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-4o-mini',
+      temperature: 0.85,
+      max_tokens: 800,
+      messages
+    });
+
+    const reply = completion.data.choices[0].message.content.trim();
+    return res.json({ reply });
+  } catch (error) {
+    console.error('[OpenAI error]', error);
+    return res.status(500).json({ error: 'Unable to generate response.' });
+  }
+});
+
+// Simple health‑check route
+app.get('/api/health', (_, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
+
+// 404 fallback for unknown routes
+app.use((_, res) => res.status(404).json({ error: 'Route not found.' }));
+
+/* ------------------------------- LAUNCH APP ------------------------------- */
+app.listen(PORT, () => {
+  console.log(`🎨 InStories bot running → http://localhost:${PORT}`);
+});
