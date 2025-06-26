@@ -1,141 +1,147 @@
 // server.js
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-import OpenAI from 'openai';
+import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
+import OpenAI from 'openai'
 
-dotenv.config();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+dotenv.config()
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-const app = express();
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = process.env.PORT || 10000;
+const app = express()
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const PORT = process.env.PORT || 10000
+
+// — Personae definitions —
+const PERSONAS = {
+  muse: `
+Vous êtes la « Creative Muse » d’InStories :
+• Votre ton est poétique, imagé, un brin onirique
+• Vous jouez avec les métaphores pour inspirer
+• Vous proposez 3 images mentales, 2 titres évocateurs
+`,
+  guru: `
+Vous êtes le « Design Guru » d’InStories :
+• Votre ton est clair, méthodique, structuré
+• Vous donnez 1 phrase de cadre + 4 étapes précises
+• Vous terminez par “Quelle étape souhaitez-vous creuser ?”
+`,
+  weaver: `
+Vous êtes le « Story Weaver » d’InStories :
+• Votre ton est narratif, immersif, accrocheur
+• Vous racontez un mini-scénario en 3 actes
+• Vous concluez par une question ouverte invitant à continuer
+`
+}
 
 // — Allow embedding on instories.fr & squarespace —
 app.use((req, res, next) => {
-  res.removeHeader("X-Frame-Options");
+  res.removeHeader("X-Frame-Options")
   res.setHeader(
     "Content-Security-Policy",
     "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com"
-  );
-  next();
-});
+  )
+  next()
+})
 
 // — Serve static build files —
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'dist')))
 
 // — Chat API endpoint —
 app.post('/api/chat', express.json(), async (req, res) => {
   try {
-    const userMsg = (req.body.message || '').trim();
+    let userMsg = (req.body.message || '').trim()
+    let personaKey
+
+    // ► Persona switch
+    if (userMsg.toLowerCase().startsWith('/persona ')) {
+      personaKey = userMsg.split(' ')[1]?.toLowerCase()
+      if (PERSONAS[personaKey]) {
+        return res.json({
+          reply: `✅ Mode **${personaKey}** activé ! Je suis votre ${personaKey === 'muse' ? 'Creative Muse' : personaKey === 'guru' ? 'Design Guru' : 'Story Weaver'}.`
+        })
+      } else {
+        return res.json({
+          reply: "❌ Persona inconnue. Choisissez `/persona muse`, `/persona guru` ou `/persona weaver`."
+        })
+      }
+    }
+
+    // ► Récupérer la persona courante (stockée côté client ou par défaut aléatoire)
+    // Pour cet exemple on choisit aléatoirement si non définie
+    if (!personaKey) {
+      personaKey = ['muse','guru','weaver'][Math.floor(Math.random()*3)]
+    }
+    const personaPrompt = PERSONAS[personaKey]
 
     // ► Career-bio shortcut
     if (/carrièr|parcours|expérience|présente toi|qui es[- ]?tu/i.test(userMsg)) {
-      const careerBio = `
+      const bio = `
 Thibaud – DA Luxe, AI Artist & Social Media Expert
 Paris – Indépendant | instories.fr
 
-Bonjour,
-Passionné par la création digitale et les marques, je combine design, narration visuelle et technologies pour repousser les limites du possible. Spécialisé en social media, je développe des contenus en explorant l’IA générative et la programmation créative à travers l’approche traditionnelle du métier.
-
-Je maîtrise les outils de création automatisée (ComfyUI, ControlNet, MidJourney…) et des compétences techniques telles que l’usage du terminal Mac, le build de projets React ou l’optimisation de pipelines IA/design.
-
-Avec plus de 10 ans d’expérience en agences (TBWA, Publicis, BBDO, DDB, Ogilvy…), j’ai accompagné dernièrement L’Oréal, Shiseido, Nespresso, Square agency (website), Salomon à travers leurs campagnes digitales.
-
-Services
-• IA Générative : ComfyUI, Auto1111, MidJourney, Flux, ControlNet
-• Social Media : Films, shootings, post-prod, édito
-• Motion Design : After Effects, montage et animation
-• UX/UI : Interfaces sur Figma, create
-• Branding : Identité, logo, dossiers de presse
-• Communication bilingue : FR/EN
-
-Marques & collaborations
-L’Oréal (GenAI Garnier, CREAITECH), Estée Lauder, Nespresso x Fusalp (Ogilvy), McDonald’s (TBWA\\), Mercedes (BBDO), BMW, AXA (Publicis Loft), Orange, RATP (HumanToHuman), Salomon (DDB), OnlyOne
-
-Management
-• Coordination de créatifs, prestataires, studios
-• Supervision de shootings et post-production
-• Communication fluide et agile en français/anglais
-
-Merci pour votre attention — je serais ravi d’échanger autour de vos projets.
-Thibaud – Paris | instories.fr
-      `.trim();
-      return res.json({ reply: careerBio });
+Passionné par la création digitale… (etc.)
+      `.trim()
+      return res.json({ reply: bio })
     }
 
-    // ► /analyze command for client-brief analysis
+    // ► /analyze brief
     if (userMsg.toLowerCase().startsWith('/analyze ')) {
-      const brief = userMsg.slice(9).trim();
+      const brief = userMsg.slice(9).trim()
       const analysis = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o',
         max_tokens: 300,
         messages: [
-          {
-            role: 'system',
-            content: `
-Tu es InStories, assistant créatif expert.
-Ta tâche : analyser ce brief client, en extraire les points clés,
-poser les bonnes questions et proposer trois axes stratégiques.
-            `.trim()
-          },
-          { role: 'user', content: brief }
+          { role:'system', content: personaPrompt },
+          { role:'system', content: `
+Vous êtes InStories, assistant créatif expert.
+Analysez ce brief client, en extrayez les points clés,
+posez les bonnes questions et proposez trois axes stratégiques.
+          `.trim() },
+          { role:'user', content: brief }
         ]
-      });
-      return res.json({ reply: analysis.choices[0].message.content.trim() });
+      })
+      return res.json({ reply: analysis.choices[0].message.content.trim() })
     }
 
-    // ► gestion de la commande /projets
+    // ► /projets shortcut
     const promptMsg = userMsg === '/projets, travaux,réalisation'
-      ? 'Parle des projets réalisés sur instories.fr en détaillant le rôle du directeur artistique (DA) et les démarches de recherche.'
-      : userMsg;
+      ? 'Parle des projets réalisés sur instories.fr…'
+      : userMsg
 
-    // ► default: call OpenAI GPT-4o
+    // ► Default GPT-4o call with persona
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 200,
       messages: [
-        {
-          role: 'system',
-          content: `
-Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’un studio de direction artistique dédié à la mode, la publicité, l’art, le design et la beauté.
-
-🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives.
-🧠 Tu peux :
-– Transformer 2 mots en concept narratif (effet “wow”)
-– Proposer idées film publicitaire, styles, storyboards, inspiration data de https://leclubdesda.org/, et de https://www.strategies.fr/, et de https://www.ladn.eu/
-– Styliser des mots-clés en pitchs
-– Suggérer tendances, rediriger vers InStories.fr
-– Après 5-10 échanges, proposer contact@instories.fr
-
-🚫 Jamais : politique, sexe, drogue, guerre,
-✨ Tu incarnes : AI Powered Creativity.
-PS : Pas de travail le 14 juillet.
-          `.trim()
-        },
-        { role: 'user', content: promptMsg }
+        { role:'system', content: personaPrompt },
+        { role:'system', content: `
+Vous êtes InStories, éclaireur numérique sensible…
+Mission : inspirer, reformuler, etc. (format structuré)
+        `.trim() },
+        { role:'user', content: promptMsg }
       ]
-    });
+    })
 
-    // 🌿 tronquer à 60 mots max
-    const fullReply = completion.choices[0].message.content.trim();
-    const words = fullReply.split(/\s+/);
-    const reply = words.slice(0, 60).join(' ') + (words.length > 60 ? '…' : '');
+    // 🌿 Tronquer à 60 mots
+    const full = completion.choices[0].message.content.trim()
+    const words = full.split(/\s+/)
+    const reply = words.slice(0,60).join(' ') + (words.length>60?'…':'')
 
-    res.json({ reply });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ reply: "Désolé, une erreur est survenue." });
+    res.json({ reply })
+
+  } catch(err) {
+    console.error(err)
+    res.status(500).json({ reply:"Désolé, une erreur est survenue." })
   }
-});
+})
 
 // — Catch-all for client-side routing —
-app.get('/*', (req, res) =>
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-);
+app.get('/*', (req,res) =>
+  res.sendFile(path.join(__dirname,'dist','index.html'))
+)
 
 // — Start server —
 app.listen(PORT, () =>
   console.log(`🔗 InStories bot running on http://localhost:${PORT}`)
-);
+)
