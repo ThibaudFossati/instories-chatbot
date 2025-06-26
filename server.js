@@ -3,17 +3,6 @@ apply_patch << 'EOF'
 *** Begin Patch
 *** Update File: server.js
 @@
-// ► Default: call OpenAI GPT-4o with concise, structured output
--    const completion = await openai.chat.completions.create({
--      model: 'gpt-4o',
--      max_tokens: 200,
--      messages: [
--        {
--          role: 'system',
--          content: `
--Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’un studio de direction artistique dédié à la mode, la publicité, l’art, le design et la beauté.
--
--🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives.
 -🧠 Tu peux :
 -– Transformer 2 mots en concept narratif (effet “wow”)
 -– Proposer idées film publicitaire, styles, storyboards, inspirations…
