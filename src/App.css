@@ -5,95 +5,29 @@
 /* 1.  Gradient animé sur tout le body
    - radial-gradient « taches » + animation très lente              */
 @keyframes bg-shift{
-  0%   {background-position: 60% 20%;}
-  50%  {background-position: 40% 80%;}
-  100% {background-position: 70% 30%;}
+/* === Tweak gradient speed & radius === */
+@keyframes bg-shift{
+  0%   {background-position:60% 20%;}
+  50%  {background-position:40% 80%;}
+  100% {background-position:70% 30%;}
 }
 body{
-  margin:0;
-  font-family:-apple-system,system-ui,sans-serif;
-  /* deux taches turquoise & violet sur fond blanc */
   background:
-    radial-gradient(circle at 70% 30%, #75f9ff 0%, #55d8ff 25%, #4f8dff00 60%),
-    radial-gradient(circle at 30% 70%, #d4b2ff 0%, #c49cff 35%, #ffffff 70%);
-  background-size:200% 200%;              /* nécessaire au déplacement */
-  animation:bg-shift 25s ease-in-out infinite alternate;
+    radial-gradient(circle at 70% 30%, #75f9ff 0%, #55d8ff 35%, #4f8dff00 70%),
+    radial-gradient(circle at 30% 70%, #d4b2ff 0%, #c49cff 40%, #ffffff 75%);
+  animation:bg-shift 15s ease-in-out infinite alternate;   /* vitesse x1.6 */
 }
 
-/* 2.  Container flex : bulles + input fixe en bas                   */
-.app{display:flex;flex-direction:column;min-height:100vh;padding:1rem;}
-.talk{flex:1 1 auto;display:flex;flex-direction:column;gap:1.2rem;}
-form{flex:0 0 auto;margin-top:1rem;display:flex;gap:.6rem;align-items:center;}
-
-/* 3.  Bulles ------------------------------------------------------- */
-.bubble{
-  max-width:80%;padding:1.1rem 1.4rem;
-  border-radius:1.8rem;backdrop-filter:blur(4px);
-  font-size:1.05rem;line-height:1.35;
-  word-break:break-word;
-}
+/* === Logo centré dans les bulles bot === */
 .bubble.bot{
-  align-self:flex-start;background:rgba(255,255,255,.75);color:#0f1111;
+  position:relative;          /* référence pour ::before */
+  padding-top:3.5rem;         /* place pour le logo */
 }
-.bubble.user{
-  align-self:flex-end;background:#4fa2ff;color:#fff;
-}
-/* Auteur (petit label gris) */
-.author{font-size:.75rem;font-weight:600;color:#8f9aa7;margin-bottom:.4rem;}
-
-/* 4.  Loader “…” plus gros ---------------------------------------- */
-.typing::after{
-  content:"…";animation:pulse 1s infinite steps(3,end);
-  font-size:1.6rem;font-weight:700;letter-spacing:.2rem;
-}
-@keyframes pulse{50%{opacity:.2;}}
-
-/* 5.  Champ & bouton ---------------------------------------------- */
-form input{
-  flex:1 1 auto;padding:1rem 1.2rem;font-size:1rem;
-  border-radius:2rem;border:1px solid #dcdfe6;outline:none;
-}
-form input::placeholder{color:#a5acb7;}
-form input:focus{border-color:#4fa2ff;box-shadow:0 0 0 2px #4fa2ff33;}
-
-.send{
-  width:3.25rem;height:3.25rem;border:none;cursor:pointer;
-  border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;
-}
-.send svg{width:1.35rem;height:1.35rem;fill:#fff;}
-
-/* 6.  Responsive (mobile ≤640px) ---------------------------------- */
-@media(max-width:640px){
-  body{font-size:15px;}
-  .bubble{max-width:90%;}
-}
-
-/* ===== Dots loader (3 ronds noirs) ================================== */
-.loader{
-  display:flex; gap:8px;            /* espace entre les cercles */
-  align-self:flex-start;            /* même alignement qu’une bulle bot */
-  padding-left:1.4rem;              /* même retrait que le texte */
-}
-.loader div{
-  width:8px;height:8px;
-  border-radius:50%;
-  background:#000;
-  animation:dot-bounce .8s ease-in-out infinite;
-}
-.loader div:nth-child(2){animation-delay:.15s}
-.loader div:nth-child(3){animation-delay:.30s}
-
-@keyframes dot-bounce{
-  0%,100%{transform:translateY(0);}
-  50%    {transform:translateY(-6px);}
-}
-
-/* === Input bar : marge L/R + bas =================================== */
-form{
-  padding:0 1rem 5px;   /* gauche-droite 1 rem, bas 5 px */
-}
-
-/* === marge externe de 10 px tout autour du bot ========================= */
-.app{
-  margin:10px;          /* top, right, bottom, left = 10 px */
+.bubble.bot::before{
+  content:'';                 /* insère l’icône */
+  position:absolute;
+  top:1rem; left:0; right:0;
+  width:48px; height:48px;
+  margin:0 auto;
+  background:url("/InStories-logo-picto.png") center / contain no-repeat;
 }
