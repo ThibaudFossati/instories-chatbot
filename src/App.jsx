@@ -52,7 +52,7 @@ export default function App() {
 
       <form onSubmit={send}>
         <input
-          placeholder="Posez une question…"
+          placeholder="Aa"
           value={msg}
           onChange={e=>setMsg(e.target.value)}
         />
