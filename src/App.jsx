@@ -1,65 +1,64 @@
-import { useState } from 'react';
-import Loader from './components/Loader';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 export default function App() {
-  const [msg, setMsg] = useState('');
-  const [history, setHistory] = useState([
-    { from:'bot', txt:'Bienvenue ! Posez votre question créative.' }
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Bienvenue ! Posez votre question.", from: 'bot' }
   ]);
+  const [options, setOptions] = useState([]);
+  const historyRef = useRef(null);
 
-  async function send(e){
-    e.preventDefault();
-    if(!msg.trim()) return;
+  useEffect(() => {
+    historyRef.current?.scrollTo(0, historyRef.current.scrollHeight);
+  }, [messages, options]);
 
-    setHistory(h=>[...h,{from:'user',txt:msg}]);
-    setMsg('');
-   
+  const sendMessage = (text) => {
+    if (!text.trim()) return;
+    const userMsg = { id: Date.now(), text, from: 'user' };
+    setMessages(msgs => [...msgs, userMsg]);
+    setOptions([]);
 
-    // ➜ bulle “typing”
-    const typingId = crypto.randomUUID();
-    setHistory(h=>[...h,{id:typingId,from:'bot',typing:true}]);
-
-    try{
-      const r = await fetch('/api/chat',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:msg})
-      });
-      const d = await r.json();
-
-      setHistory(h=>h
-        .filter(m=>m.id!==typingId)          // retire loader
-        .concat({from:'bot',txt:d.reply})    // ajoute vraie réponse
-      );
-    }catch(err){
-      setHistory(h=>h
-        .filter(m=>m.id!==typingId)
-        .concat({from:'bot',txt:'(erreur API)'}));
-    }
-   
-  }
+    setTimeout(() => {
+      const botMsg = {
+        id: Date.now()+1,
+        text: \`J’ai reçu : "\${text}". Choisissez une suite :\`
+      };
+      setMessages(msgs => [...msgs, botMsg]);
+      setOptions(['Idée A', 'Idée B', 'Idée C']);
+    }, 800);
+  };
 
   return (
-    <div className="app">
-      <div className="talk">
-        {history.map((m,i)=>(
-          m.typing
-            ? <Loader key={i}/>
-            : <p key={i} className={'bubble '+m.from}>{m.txt}</p>
+    <div className="container">
+      <header className="header">
+        <h1>InStories Chat</h1>
+        <button className="btn-contact">Contact</button>
+      </header>
+
+      <div className="history" ref={historyRef}>
+        {messages.map(m => (
+          <div key={m.id} className={\`bubble \${m.from}\`}>
+            {m.text}
+          </div>
         ))}
+
+        {options.length > 0 && (
+          <div className="options">
+            {options.map(opt => (
+              <button key={opt} className="chip" onClick={() => sendMessage(opt)}>
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      <form onSubmit={send}>
-        <input
-          placeholder="Aa"
-          value={msg}
-          onChange={e=>setMsg(e.target.value)}
-        />
-        <button className="send">
-          <svg viewBox="0 0 24 24"><path d="M2 12 22 3l-3 9 3 9L2 12z" fill="#fff"/></svg>
-        </button>
-      </form>
+      <footer className="footer">
+        <form onSubmit={e => { e.preventDefault(); sendMessage(e.target.input.value); e.target.reset(); }}>
+          <input name="input" placeholder="Votre message…" />
+          <button type="submit" className="btn-send">➤</button>
+        </form>
+      </footer>
     </div>
   );
 }
