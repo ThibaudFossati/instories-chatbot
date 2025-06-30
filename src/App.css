@@ -125,3 +125,14 @@ body, html {
   max-height: auto;         /* permet à la boîte de croître vers le haut */
 }
 /* === END positioning tweak === */
+
+/* === Positionner la container en bas === */
+.container {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;             /* distance du bas, ajustable */
+  transform: translateX(-50%);
+  margin: 0;                /* annule le centering vertical */
+  max-height: auto;         /* permet à la boîte de croître vers le haut */
+}
+/* === END positioning tweak === */
