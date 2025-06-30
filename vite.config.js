@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: "https://instories-chatbot.onrender.com/",
   plugins: [react()],
+  base: './'                 // ← chemins relatifs pour JS & CSS
 })
