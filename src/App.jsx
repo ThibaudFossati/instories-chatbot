@@ -21,7 +21,7 @@ export default function App() {
     setTimeout(() => {
       const botMsg = {
         id: Date.now()+1,
-        text: \`J’ai reçu : "\${text}". Choisissez une suite :\`
+        text: `J’ai reçu : "${text}". Choisissez une suite :`
       };
       setMessages(msgs => [...msgs, botMsg]);
       setOptions(['Idée A', 'Idée B', 'Idée C']);
@@ -37,7 +37,7 @@ export default function App() {
 
       <div className="history" ref={historyRef}>
         {messages.map(m => (
-          <div key={m.id} className={\`bubble \${m.from}\`}>
+          <div key={m.id} className={`bubble ${m.from}`}>
             {m.text}
           </div>
         ))}
