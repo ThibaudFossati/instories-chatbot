@@ -7,7 +7,6 @@ export default function App() {
   const [history, setHistory] = useState([
     { from:'bot', txt:'Bienvenue ! Posez votre question créative.' }
   ]);
-  const [loading, setLoading] = useState(false);
 
   async function send(e){
     e.preventDefault();
@@ -15,7 +14,7 @@ export default function App() {
 
     setHistory(h=>[...h,{from:'user',txt:msg}]);
     setMsg('');
-    setLoading(true);
+   
 
     // ➜ bulle “typing”
     const typingId = crypto.randomUUID();
@@ -38,7 +37,7 @@ export default function App() {
         .filter(m=>m.id!==typingId)
         .concat({from:'bot',txt:'(erreur API)'}));
     }
-    setLoading(false);
+   
   }
 
   return (
