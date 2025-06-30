@@ -92,3 +92,8 @@ form input:focus{border-color:#4fa2ff;box-shadow:0 0 0 2px #4fa2ff33;}
 form{
   padding:0 1rem 5px;   /* gauche-droite 1 rem, bas 5 px */
 }
+
+/* === marge externe de 10 px tout autour du bot ========================= */
+.app{
+  margin:10px;          /* top, right, bottom, left = 10 px */
+}
