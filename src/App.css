@@ -1,153 +1,48 @@
-:root {
-  --bg: #f0f0f5;
-  --accent: #5a91f4;
-  --text: #111;
+/* ===== FOND ANIMÉ ===== */
+@keyframes bgShift {
+  0%   { background-position:  0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:  0% 50%; }
 }
+body,html,#root{
+  margin:0;height:100%;font-family:-apple-system,system-ui,sans-serif;
+  background:linear-gradient(135deg,#ffffff 0%,#c8cbff 50%,#91a4ff 100%);
+  background-size:400% 400%;animation:bgShift 18s ease-in-out infinite;
+}
+/* ===== CONTENEUR ===== */
+.app{
+  max-width:780px;width:95%;margin:0 auto;min-height:100%;
+  display:flex;flex-direction:column;gap:1.2rem;padding:1.5rem 1rem;
+}
+/* ===== HISTORIQUE ===== */
+.talk{flex:1;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
+/* ===== BULLES ===== */
+.bot,.user{
+  max-width:88%;padding:1rem 1.25rem;border-radius:1rem;
+  word-break:break-word;font-size:1rem;line-height:1.45;
+}
+.bot  {align-self:flex-start;background:#fff;color:#111;
+       border-top-left-radius:0}
+.user {align-self:flex-end;background:#4e8cff;color:#fff;
+       border-top-right-radius:0}
+/* ===== FORMULAIRES ===== */
+form{display:flex;gap:.6rem}
+input{
+  flex:1;padding:1rem 1.2rem;border:1px solid #e0e0e0;
+  border-radius:2rem;font-size:1rem
+}
+button.send{
+  width:3rem;height:3rem;border:none;border-radius:50%;
+  background:#4e8cff;cursor:pointer;display:flex;align-items:center;justify-content:center
+}
+button.send svg{width:20px;height:20px;fill:#fff}
+/* ===== LOADER (… animé) ===== */
+@keyframes dots{0%{content:"…"}33%{content:"··"}66%{content:"· "}}
+.typing::after{content:"…";animation:dots 1s steps(3,end) infinite}
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .bot,.user{font-size:.95rem}
+  input{font-size:.95rem}
 }
-
-body, html, #root {
-  height: 100%;
-  width: 100%;
-}
-
-body {
-  font-family: -apple-system, system-ui, sans-serif;
-  background: var(--bg);
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 1080px;
-  margin: auto;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.header {
-  padding: 16px;
-  text-align: center;
-  color: var(--text);
-}
-
-.header .icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.history {
-  flex: 1;
-  padding: 12px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.bubble {
-  max-width: 80%;
-  padding: 10px 16px;
-  border-radius: 20px;
-  word-break: break-word;
-  position: relative;
-}
-
-.bubble.user {
-  align-self: flex-end;
-  background: var(--accent);
-  color: #fff;
-  border-bottom-right-radius: 5px;
-}
-
-.bubble.bot {
-  align-self: flex-start;
-  background: #fff;
-  color: var(--text);
-  border-bottom-left-radius: 5px;
-}
-
-.form {
-  display: flex;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.form input {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 24px;
-  border: 1px solid #ccc;
-}
-
-.form button {
-  width: 48px;
-  height: 48px;
-  margin-left: 10px;
-  border: none;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-/* === MOBILE FONT-SIZE BEGIN === */
-@media (max-width: 600px) {
-  body {
-    font-size: 16px !important;
-  }
-  .form input,
-  .form button {
-    font-size: 16px !important;
-  }
-}
-/* === MOBILE FONT-SIZE END === */
-
-/* === RESPONSIVE LAYOUT BEGIN === */
-html, body, #root {
-  margin: 0;
-  padding: 0;
-}
-
-.app {
-  width: 100%;
-  max-width: 1080px;
-  min-height: 100vh;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-/* === RESPONSIVE LAYOUT END === */
-
-/* Titre InStories */
-.title {
-  line-height: 1.2;
-  font-size: 2rem;
-  margin: 0.5em 0;
-}
-.title em {
-  font-style: italic;
-  font-weight: normal;
-}
-
-/* === SEND SIZE OVERRIDE BEGIN === */
-.send {
-  width: 4.5rem;
-  height: 4.5rem;
-}
-.send svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: block;
-  margin: auto;
-}
-/* === SEND SIZE OVERRIDE END === */
+/* EOF */
