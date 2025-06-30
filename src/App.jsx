@@ -32,7 +32,7 @@ export default function App() {
     <div className="container">
       <header className="header">
         <h1>InStories Chat</h1>
-        <button className="btn-contact" onClick={() => window.location.href = 'mailto:contact@instories.fr'} aria-label="Contact email">
+        <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr', '_blank')} aria-label="Contact email">
   <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24">
     <path d="M2,4H22A2,2 0 0 1 24,6V18A2,2 0 0 1 22,20H2A2,2 0 0 1 0,18V6A2,2 0 0 1 2,4M22,6L12,13L2,6"/>
   </svg>
