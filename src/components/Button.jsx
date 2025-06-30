@@ -1,7 +1,9 @@
-export default function Button({ label, onClick }) {
+export default function Button({onClick}){
   return (
-    <button className="button" onClick={onClick}>
-      {label}
+    <button className="send" type="submit" onClick={onClick}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M2 21 23 12 2 3l5 9-5 9z"/>
+      </svg>
     </button>
-  );
+  )
 }
