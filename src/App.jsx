@@ -31,6 +31,7 @@ export default function App() {
   return (
     <div className="container">
       <header className="header">
+  <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr', '_blank')} aria-label="Contact email">Contact</button>
         <h1>InStories Chat</h1>
         <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr', '_blank')} aria-label="Contact email">
   <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24">
