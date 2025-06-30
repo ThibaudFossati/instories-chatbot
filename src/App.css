@@ -46,3 +46,11 @@ button.send svg{width:20px;height:20px;fill:#fff}
   input{font-size:.95rem}
 }
 /* EOF */
+
+/* ===== Garde le champ de saisie au bas de la fenêtre ===== */
+.app{
+  display:flex;               /* déjà présent, on confirme */
+  flex-direction:column;      /* piles verticalement */
+  min-height:100vh;           /* occupe toute la hauteur */
+}
+form{ margin-top:auto; }       /* pousse le formulaire en bas */
