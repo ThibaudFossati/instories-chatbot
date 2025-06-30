@@ -87,3 +87,8 @@ form input:focus{border-color:#4fa2ff;box-shadow:0 0 0 2px #4fa2ff33;}
   0%,100%{transform:translateY(0);}
   50%    {transform:translateY(-6px);}
 }
+
+/* === Input bar : marge L/R + bas =================================== */
+form{
+  padding:0 1rem 5px;   /* gauche-droite 1 rem, bas 5 px */
+}
