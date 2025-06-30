@@ -1,73 +1,40 @@
-/*────────────────  InStories – UI léger, full-responsive  ────────────────*/
-:root{
-  --c-bg1:#6c84ff;
-  --c-bg2:#a775ff;
-  --c-card:rgba(255,255,255,.85);
-  --c-user:#5795ff;
-  --c-bot:#ffffff;
-  --c-text:#111;
-  --c-accent:#5a91f4;
-  --radius:18px;
-  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
 }
 
-/* full-height layout ---------------------------------------------------------*/
-html,body,#root{height:100%;margin:0}
-body{
-  background:linear-gradient(135deg,var(--c-bg1) 0%,var(--c-bg2) 100%);
-  display:flex;justify-content:center;align-items:flex-start;padding:16px;
+.bubble.user{
+  align-self:flex-end;
+  background:var(--c-user);color:#fff;
+  border-bottom-right-radius:6px;
 }
 
-/* container ------------------------------------------------------------------*/
-.container{
-  width:100%;max-width:1080px;
-  flex:1 1 auto;display:flex;flex-direction:column;
-  backdrop-filter:blur(32px) saturate(140%);
-  background:rgba(255,255,255,.18);border-radius:var(--radius);
-  overflow:hidden;
+.bubble.user::after, .bubble.bot::after{
+  content:'';position:absolute;bottom:-10px;width:14px;height:14px;
+  background:inherit;transform:rotate(45deg);
 }
 
-/* bulles ---------------------------------------------------------------------*/
-.history{flex:1 1 auto;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px}
-.bubble{
-  border-radius:var(--radius);
-  padding:14px 18px;max-width:85%;line-height:1.46;font-size:17px;
-  box-shadow:0 2px 4px rgb(0 0 0/.05)
-}
-.bubble.user{align-self:flex-end;background:var(--c-user);color:#fff;border-bottom-right-radius:6px}
-.bubble.bot {align-self:flex-start;background:var(--c-card);color:var(--c-text);border-bottom-left-radius:6px}
+.bubble.user::after{right:10px}
+.bubble.bot ::after{left:10px}
 
-/* barre de saisie + bouton ----------------------------------------------------*/
-.form{display:flex;gap:12px;padding:18px;background:transparent}
+.form{
+  display:flex;gap:12px;padding:20px;background:transparent;
+}
 .form input{
-  flex:1 1 auto;padding:14px 18px;font-size:17px;
-  border-radius:999px;border:1px solid rgb(255 255 255/.45);
-  background:rgb(255 255 255/.15);color:#fff;outline:0;
+  flex:1;padding:14px 18px;font-size:17px;border:1px solid rgb(0 0 0/.08);
+  border-radius:999px;background:#fff;color:#111;outline:0;
 }
-.form input::placeholder{color:rgb(255 255 255/.7)}
+.form input::placeholder{color:#888}
+
 .send{
-  width:54px;height:54px;border:none;cursor:pointer;
-  border-radius:50%;background:var(--c-accent);
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .15s ease-out,opacity .15s;
+  width:54px;height:54px;border:none;border-radius:50%;
+  background:var(--c-user);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:transform .15s ease-out;
 }
-.send:hover{transform:scale(1.07)}
+.send:hover{transform:scale(1.06)}
 .send svg{width:26px;height:26px;fill:#fff}
 
-/* loader (3 points) -----------------------------------------------------------*/
-@keyframes dots{ 0%,20%{transform:translateY(0)} 40%{transform:translateY(-4px)} 60%{transform:translateY(0)} }
-.loader{display:inline-flex;gap:6px;padding:12px}
-.loader span{
-  width:8px;height:8px;border-radius:50%;background:var(--c-accent);
-  animation:dots 1s infinite cubic-bezier(.65,.05,.36,1);
-}
-.loader span:nth-child(2){animation-delay:.15s}
-.loader span:nth-child(3){animation-delay:.3s}
-
-/*  mobile : le tout passe à 100 vw sans débordement --------------------------*/
 @media(max-width:640px){
   body{padding:8px}
-  .container{border-radius:12px}
+  .container{border-radius:16px}
+  .history{padding:24px}
   .bubble{font-size:15px}
   .form input{font-size:15px}
 }
