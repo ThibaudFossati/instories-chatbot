@@ -1,56 +1,43 @@
-import { useState } from 'react'
-import { Bubble, InputField, Button, Loader } from './components'
+import { useState } from 'react';
+import './App.css';
 
 export default function App() {
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [msg, setMsg] = useState('');
   const [history, setHistory] = useState([
-    {
-      text: `Bienvenue dans mon carnet visuel.
-Posez une question, et laissez-moi vous guider à travers mes visions.`,
-      from: 'bot'
-    }
-  ])
-
-  const sendMessage = async e => {
-    if (e?.preventDefault) e.preventDefault()
-    if (!message.trim()) return
-
-    setHistory(h => [...h, { text: message, from: 'user' }])
-    setMessage('')
-    setLoading(true)
-
-    try {
-      const r = await fetch('/api/chat', {
-        method : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body   : JSON.stringify({ message })
-      })
-      const { reply } = await r.json()
-      setHistory(h => [...h, { text: reply, from: 'bot' }])
-    } catch (err) {
-      setHistory(h => [...h, { text: '(erreur API)', from: 'bot' }])
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
+    { from: 'bot', txt: 'Bienvenue dans mon carnet visuel. Posez une question, et laissez-moi vous guider.' }
+  ]);
+  async function send(e) {
+    e.preventDefault();
+    if (!msg.trim()) return;
+    setHistory(h => [...h, { from: 'user', txt: msg }]);
+    setMsg('');
+    const r = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ message: msg })
+    });
+    const d = await r.json();
+    setHistory(h => [...h, { from: 'bot', txt: d.reply }]);
   }
 
   return (
-    <div className="container">
-      <div className="history">
-        {history.map((m, i) => <Bubble key={i} text={m.text} from={m.from} />)}
-        {loading && <Loader />}
-      </div>
+    <div className="wrapper">
+      <h1 className="title">✨ InStories</h1>
+      <section className="talk">
+        {history.map((m,i)=>(
+          <p key={i} className={'bubble '+m.from}>{m.txt}</p>
+        ))}
+      </section>
 
-      <form className="form" onSubmit={sendMessage}>
-        <InputField
-          value={message}
-          onChange={e => setMessage(e.target.value)}
+      <form onSubmit={send} className="bar">
+        <input
           placeholder="Posez une question…"
+          value={msg}
+          onChange={e=>setMsg(e.target.value)}
         />
-        <Button label="Envoyer" onClick={sendMessage} />
+        <button className="send">
+          <svg viewBox="0 0 24 24"><path d="M2 12 22 3l-3 9 3 9L2 12z" fill="#fff"/></svg>
+        </button>
       </form>
     </div>
-  )
+  );
 }
