@@ -16,3 +16,25 @@
   padding-bottom:calc(var(--form-h) + var(--gap) + 20px);
 }
 /* === END FIX === */
+/* === FIX input full-width & spacing ================================= */
+:root{ --form-h:3.3rem; --gap:.6rem; }
+.form{
+  position:fixed; left:10px; right:10px;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+  display:flex; gap:var(--gap); z-index:10;
+}
+.form input{
+  flex:1; min-width:0; height:var(--form-h);
+  padding:0 1rem; border-radius:2rem;
+  border:1px solid #ffffff44;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(4px);
+}
+.form button{
+  width:var(--form-h); height:var(--form-h); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:none; background:#000; color:#fff; cursor:pointer;
+}
+.bubble{ max-width:75%; line-height:1.35; padding:.9rem 1.1rem; }
+.history{ padding:20px 10px calc(var(--form-h) + var(--gap) + 20px); }
+/* === END FIX ======================================================= */
