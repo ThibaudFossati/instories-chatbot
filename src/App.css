@@ -136,3 +136,16 @@ body, html {
   max-height: auto;         /* permet à la boîte de croître vers le haut */
 }
 /* === END positioning tweak === */
+
+/* === FORCE bottom anchoring for chat container === */
+.container {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 24px !important;        /* ajustable */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+}
+/* Remove any centering vertical */
+.container { margin-top: 0 !important; }
+/* === END anchoring patch === */
