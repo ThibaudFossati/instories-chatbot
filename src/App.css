@@ -202,3 +202,21 @@ body, html {
   padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom) + 60px);
 }
 /* === End Responsive Chat Container === */
+
+/* === Mobile top spacing === */
+@media (max-width: 480px) {
+  .container {
+    top: 24px !important;    /* garde 24px sous la barre de statut */
+  }
+}
+
+/* === Contact button style update === */
+.btn-contact {
+  background: #ffffff !important;
+  color: rgba(255,255,255,0.5) !important; /* lettres semi-transparentes */
+  border: 1px solid rgba(255,255,255,0.5) !important;
+}
+.btn-contact:hover {
+  color: rgba(255,255,255,0.8) !important;
+  border-color: rgba(255,255,255,0.8) !important;
+}
