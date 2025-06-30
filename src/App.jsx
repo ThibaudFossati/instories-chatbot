@@ -32,7 +32,7 @@ export default function App() {
     <div className="container">
       <header className="header">
         <h1>InStories Chat</h1>
-        <button className="btn-contact">Contact</button>
+        <button className="btn-contact" onClick={() => window.location.href = 'mailto:contact@instories.fr'}>Contact</button>
       </header>
 
       <div className="history" ref={historyRef}>
