@@ -59,3 +59,17 @@
 }
 /* === END FIX ======================================================= */
 /* trigger rebuild test */
+
+/* === PATCH urgent: full-width input + button align === */
+.form {
+  padding: 0 10px; /* garde un peu de marge latérale */
+}
+.form input {
+  flex: 1 1 auto;
+  width: calc(100% - var(--form-h) - var(--gap) - 2px); /* 2px pour la bordure */
+}
+.form button {
+  margin-left: var(--gap);
+  flex: 0 0 var(--form-h);
+}
+/* === END PATCH === */
