@@ -16,7 +16,7 @@ export default function App() {
     if (!text.trim()) return;
     const userMsg = { id: Date.now(), text, from: 'user' };
     setMessages(msgs => [...msgs, userMsg]);
-    setOptions([]);
+    setLoading(true);n    setLoading(true);n    setLoading(true);n    setOptions([]);
 
     setTimeout(() => {
       const botMsg = {
@@ -24,7 +24,7 @@ export default function App() {
         text: `J’ai reçu : "${text}". Choisissez une suite :`
       };
       setMessages(msgs => [...msgs, botMsg]);
-      setOptions(['Idée A', 'Idée B', 'Idée C']);
+    setLoading(true);n    setLoading(true);n    setLoading(true);n      setOptions(['Idée A', 'Idée B', 'Idée C']);
     }, 800);
   };
 
