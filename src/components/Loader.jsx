@@ -1,7 +1,7 @@
-export default function Loader(){
+export default function Loader () {
   return (
     <div className="loader">
-      <span/><span/><span/>
+      <div /><div /><div />
     </div>
-  )
+  );
 }
