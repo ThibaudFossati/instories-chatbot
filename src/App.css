@@ -170,3 +170,39 @@
   line-height: 1;
 }
 /* === End chat input styling === */
+
+/* === Responsive adjustments for chat input === */
+@media (max-width: 600px) {
+  .form {
+    padding: 0 8px;
+    gap: 4px;
+  }
+  .form input {
+    height: 40px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+  }
+  .form button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .form {
+    padding: 0 12px;
+    gap: 6px;
+  }
+  .form input {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 0.95rem;
+    border-radius: 22px;
+  }
+  .form button {
+    width: 44px;
+    height: 44px;
+  }
+}
+/* === End responsive adjustments === */
