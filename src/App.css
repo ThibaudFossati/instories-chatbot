@@ -1,33 +1,60 @@
-/* === FIX footer overlap & safe-area === */
-:root{
-  --form-h: 3.3rem;
-  --gap   : .6rem;
-}
-.form{
-  position:fixed;
-  left:10px;
-  right:10px;
-  bottom:calc(10px + env(safe-area-inset-bottom));
-  display:flex;
-  gap:var(--gap);
-  z-index:10;
-.history{
-  padding-bottom:calc(var(--form-h) + var(--gap) + 20px);
-/* === END FIX === */
 /* === FIX input full-width & spacing ================================= */
-:root{ --form-h:3.3rem; --gap:.6rem; }
-  position:fixed; left:10px; right:10px;
-  display:flex; gap:var(--gap); z-index:10;
-.form input{
-  flex:1; min-width:0; height:var(--form-h);
-  padding:0 1rem; border-radius:2rem;
-  border:1px solid #ffffff44;
-  background:rgba(255,255,255,.7);
-  backdrop-filter:blur(4px);
-.form button{
-  width:var(--form-h); height:var(--form-h); border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  border:none; background:#000; color:#fff; cursor:pointer;
-.bubble{ max-width:75%; line-height:1.35; padding:.9rem 1.1rem; }
-.history{ padding:20px 10px calc(var(--form-h) + var(--gap) + 20px); }
+:root {
+  --form-h: 3.3rem;
+  --gap: 0.6rem;
+}
+
+.form {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: var(--gap);
+  z-index: 10;
+}
+
+.form input {
+  flex: 1;
+  min-width: 0;
+  height: var(--form-h);
+  padding: 0 1rem;
+  border-radius: 2rem;
+  border: 1px solid #ffffff44;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.form button {
+  width: var(--form-h);
+  height: var(--form-h);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* Bulles de conversation */
+.bubble {
+  max-width: 75%;
+  line-height: 1.35;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 1.2rem;
+  backdrop-filter: blur(2px);
+}
+
+/* Historique des messages */
+.history {
+  padding: 20px 10px calc(var(--form-h) + var(--gap) + 20px);
+  overflow-y: auto;
+}
 /* === END FIX ======================================================= */
