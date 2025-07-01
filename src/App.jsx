@@ -5,7 +5,9 @@ import './App.css';
 const API_BASE = import.meta.env.VITE_API_BASE_URL || window.location.origin;
 
 export default function App() {
-  const [messages, setMessages] = useState([{ id: 1, text: "Bienvenue ! Posez votre question.", from: 'bot' }]);
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Bienvenue ! Posez votre question.", from: 'bot' }
+  ]);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const historyRef = useRef(null);
@@ -21,16 +23,16 @@ export default function App() {
     setOptions([]);
     setLoading(true);
     try {
-      const res = await fetch(\`\${API_BASE}/api/chat\`, {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text })
       });
       const { reply } = await res.json();
-      setMessages(msgs => [...msgs, { id: Date.now()+1, text: reply, from: 'bot' }]);
+      setMessages(msgs => [...msgs, { id: Date.now() + 1, text: reply, from: 'bot' }]);
       setOptions(['Idée A', 'Idée B', 'Idée C']);
     } catch (err) {
-      setMessages(msgs => [...msgs, { id: Date.now()+2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
+      setMessages(msgs => [...msgs, { id: Date.now() + 2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
     } finally {
       setLoading(false);
     }
@@ -41,12 +43,18 @@ export default function App() {
       <header className="header">
         <h1>InStories Chat</h1>
         {window.location.hostname !== "instories-chatbot.onrender.com" && (
-        {window.location.hostname !== "instories-chatbot.onrender.com" && (
-          <button className="btn-contact" onClick={() => window.open("mailto:contact@instories.fr","_blank")}>Contact</button>
-        )}        )}      </header>
+          <button
+            className="btn-contact"
+            onClick={() => window.open("mailto:contact@instories.fr", "_blank")}
+          >
+            Contact
+          </button>
+        )}
+      </header>
+
       <div className="history" ref={historyRef}>
         {messages.map(m => (
-          <div key={m.id} className={\`bubble \${m.from}\`}>{m.text}</div>
+          <div key={m.id} className={`bubble ${m.from}`}>{m.text}</div>
         ))}
         {loading
           ? <Loader />
@@ -58,8 +66,13 @@ export default function App() {
               </div>
             )}
       </div>
+
       <footer className="footer">
-        <form onSubmit={e => { e.preventDefault(); sendMessage(e.target.input.value); e.target.reset(); }}>
+        <form onSubmit={e => {
+          e.preventDefault();
+          sendMessage(e.target.input.value);
+          e.target.reset();
+        }}>
           <input name="input" placeholder="Votre message…" />
           <button type="submit" className="btn-send">➤</button>
         </form>
