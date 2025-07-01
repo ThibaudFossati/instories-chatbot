@@ -12,23 +12,33 @@ const PORT = process.env.PORT || 10000;
 
 // Sécurité iframe
 app.use((req, res, next) => {
-  res.removeHeader("X-Frame-Options");
+  res.removeHeader('X-Frame-Options');
   // Autoriser l’iframe uniquement sur instories.fr et instories.squarespace.com
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com");
+  res.setHeader(
+    'Content-Security-Policy',
+    "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com"
+  );
   next();
 });
+
 // Static + SPA fallback
 app.use(express.static(path.join(__dirname, 'dist')));
-});  } catch (err) {
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// API chat
+app.post('/api/chat', express.json(), async (req, res) => {
+  try {
+    const reply = await generateReply(req.body.message);
+    return res.json({ reply });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ reply: "Désolé, une erreur est survenue." });
+    return res.status(500).json({ reply: "Désolé, une erreur est survenue." });
   }
 });
 
-
+// Démarrage serveur
 app.listen(PORT, () => {
-  console.log("InStories bot running on http://localhost:" + PORT);
-});
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  console.log('InStories bot running on http://localhost:' + PORT);
 });
