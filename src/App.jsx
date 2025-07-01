@@ -40,8 +40,9 @@ export default function App() {
     <div className="container">
       <header className="header">
         <h1>InStories Chat</h1>
-        <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr','_blank')}>Contact</button>
-      </header>
+        {window.location.hostname !== "instories-chatbot.onrender.com" && (
+          <button className="btn-contact" onClick={() => window.open("mailto:contact@instories.fr","_blank")}>Contact</button>
+        )}      </header>
       <div className="history" ref={historyRef}>
         {messages.map(m => (
           <div key={m.id} className={\`bubble \${m.from}\`}>{m.text}</div>
