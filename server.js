@@ -16,7 +16,6 @@ app.use((req, res, next) => {
     // Autoriser l’iframe uniquement sur instories.fr et instories.squarespace.com
   res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com");
     'Content-Security-Policy',
-    \"frame-ancestors 'self' https://instories.fr https://instories.squarespace.com\"
   );
   next();
 });
