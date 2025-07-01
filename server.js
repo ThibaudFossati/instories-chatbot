@@ -33,6 +33,8 @@ app.post('/api/chat', express.json(), async (req, res) => {
   }
 });
 
-app.listen(PORT, () =>
-  console.log("InStories bot running on http://localhost:" + PORT);
 );
+
+app.listen(PORT, () => {
+  console.log("InStories bot running on http://localhost:" + PORT);
+});
