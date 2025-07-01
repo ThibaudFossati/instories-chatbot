@@ -1,63 +1,61 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Loader from './components/Loader';
 import './App.css';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || window.location.origin;
+
 export default function App() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Bienvenue ! Posez votre question.", from: 'bot' }
-  ]);
+  const [messages, setMessages] = useState([{ id: 1, text: "Bienvenue ! Posez votre question.", from: 'bot' }]);
   const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const historyRef = useRef(null);
 
   useEffect(() => {
     historyRef.current?.scrollTo(0, historyRef.current.scrollHeight);
-  }, [messages, options]);
+  }, [messages, options, loading]);
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     if (!text.trim()) return;
     const userMsg = { id: Date.now(), text, from: 'user' };
     setMessages(msgs => [...msgs, userMsg]);
-    setLoading(true);n    setLoading(true);n    setLoading(true);n    setOptions([]);
-
-    setTimeout(() => {
-      const botMsg = {
-        id: Date.now()+1,
-        text: `J’ai reçu : "${text}". Choisissez une suite :`
-      };
-      setMessages(msgs => [...msgs, botMsg]);
-    setLoading(true);n    setLoading(true);n    setLoading(true);n      setOptions(['Idée A', 'Idée B', 'Idée C']);
-    }, 800);
+    setOptions([]);
+    setLoading(true);
+    try {
+      const res = await fetch(\`\${API_BASE}/api/chat\`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const { reply } = await res.json();
+      setMessages(msgs => [...msgs, { id: Date.now()+1, text: reply, from: 'bot' }]);
+      setOptions(['Idée A', 'Idée B', 'Idée C']);
+    } catch (err) {
+      setMessages(msgs => [...msgs, { id: Date.now()+2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="container">
       <header className="header">
-  <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr', '_blank')} aria-label="Contact email">Contact</button>
         <h1>InStories Chat</h1>
-        <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr', '_blank')} aria-label="Contact email">
-  <svg width="24" height="24" fill="#fff" viewBox="0 0 24 24">
-    <path d="M2,4H22A2,2 0 0 1 24,6V18A2,2 0 0 1 22,20H2A2,2 0 0 1 0,18V6A2,2 0 0 1 2,4M22,6L12,13L2,6"/>
-  </svg>
-</button>
+        <button className="btn-contact" onClick={() => window.open('mailto:contact@instories.fr','_blank')}>Contact</button>
       </header>
-
       <div className="history" ref={historyRef}>
         {messages.map(m => (
-          <div key={m.id} className={`bubble ${m.from}`}>
-            {m.text}
-          </div>
+          <div key={m.id} className={\`bubble \${m.from}\`}>{m.text}</div>
         ))}
-
-        {options.length > 0 && (
-          <div className="options">
-            {options.map(opt => (
-              <button key={opt} className="chip" onClick={() => sendMessage(opt)}>
-                {opt}
-              </button>
-            ))}
-          </div>
-        )}
+        {loading
+          ? <Loader />
+          : options.length > 0 && (
+              <div className="options">
+                {options.map(opt => (
+                  <button key={opt} onClick={() => sendMessage(opt)} className="chip">{opt}</button>
+                ))}
+              </div>
+            )}
       </div>
-
       <footer className="footer">
         <form onSubmit={e => { e.preventDefault(); sendMessage(e.target.input.value); e.target.reset(); }}>
           <input name="input" placeholder="Votre message…" />
