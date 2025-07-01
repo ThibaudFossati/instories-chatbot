@@ -12,10 +12,9 @@ const PORT = process.env.PORT || 10000;
 
 // Sécurité iframe
 app.use((req, res, next) => {
-  res.removeHeader('X-Frame-Options');
-    // Autoriser l’iframe uniquement sur instories.fr et instories.squarespace.com
-    'Content-Security-Policy',
-  );
+  res.removeHeader("X-Frame-Options");
+  // Autoriser l’iframe uniquement sur instories.fr et instories.squarespace.com
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://instories.fr https://instories.squarespace.com");
   next();
 });
 

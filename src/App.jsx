@@ -12,18 +12,17 @@ export default function App() {
 
   const sendMessage = async (text) => {
     if (!text.trim()) return;
-    setMsgs(m=>[...m,{ id:Date.now(), text, from:'user'}]);
+    setMessages(msgs => [...msgs, { id: Date.now(), text, from: "user" }]);
     setLoading(true);
     try {
-      const res = await fetch('/api/chat', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({message:text})
+      const res = await fetch("/api/chat", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
       });
       const { reply } = await res.json();
-      setMsgs(m=>[...m,{ id:Date.now()+1, text: reply, from:'bot'}]);
-    } catch {
-      setMsgs(m=>[...m,{ id:Date.now()+2, text:'❌ Erreur, réessaie.', from:'bot'}]);
+      setMessages(msgs => [...msgs, { id: Date.now()+1, text: reply, from: "bot" }]);
+    } catch (err) {
+      setMessages(msgs => [...msgs, { id: Date.now()+2, text: "❌ Erreur, réessaie.", from: "bot" }]);
     } finally {
       setLoading(false);
     }
