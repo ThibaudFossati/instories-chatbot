@@ -48,7 +48,6 @@ export default function App() {
       <footer className="footer">
         <form onSubmit={e=>{ e.preventDefault(); sendMessage(e.target.input.value); e.target.reset(); }}>
           <input name="input" placeholder="Votre message…"/>
-          <button type="submit" className="btn-send">➤</button>
         </form>
       </footer>
     </div>
