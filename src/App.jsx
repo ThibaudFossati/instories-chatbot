@@ -63,7 +63,7 @@ export default function App() {
         <h1>InStories Chat</h1>
         {window.location.hostname !== "instories-chatbot.onrender.com" && (
           <button
-            className="btn-contact"
+            className="btn-new"
             onClick={() => window.open("mailto:contact@instories.fr", "_blank")}
           >
             Contact
