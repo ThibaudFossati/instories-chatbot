@@ -6,42 +6,60 @@
   --pad: 24px;
   --gap: 12px;
 }
+
 body, html {
   margin: 0;
   height: 100%;
   font-family: system-ui, sans-serif;
   background: var(--bg-gradient);
 }
+
+/* === Container principal === */
 .container {
-  padding: 0 16px 16px; background: transparent; display: flex; justify-content: center;
-  margin: auto;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 400px;
   background: var(--glass);
   backdrop-filter: blur(8px);
   border-radius: var(--radius);
   padding: var(--pad);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
+/* === Header === */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--gap);
 }
+
 .header h1 {
   font-size: 1.2rem;
   color: #fff;
 }
+
 .btn-contact {
-  background: none;
-  border: 1px solid #fff;
-  color: #fff;
+  background: #ffffff;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 4px 8px;
   border-radius: 8px;
   cursor: pointer;
 }
+
+.btn-contact:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* === Historique === */
 .history {
   flex: 1;
   overflow-y: auto;
@@ -49,46 +67,74 @@ body, html {
   flex-direction: column;
   gap: var(--gap);
   margin-bottom: var(--gap);
+  padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom) + 60px);
 }
+
+/* === Bulles utilisateur / bot === */
 .bubble {
-  max-width: 80%;
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: var(--radius);
-  line-height: 1.4;
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 80%;
+  white-space: pre-line;
+  animation: fadeInUp 0.3s ease both;
 }
-.bubble.bot {
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
-  align-self: flex-start;
-}
+
 .bubble.user {
-  background: var(--accent);
-  color: #fff;
+  background: #e8f0fe;
+  color: #202124;
   align-self: flex-end;
 }
+
+.bubble.bot {
+  background: #f1f3f4;
+  color: #202124;
+  align-self: flex-start;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Suggestions dynamiques === */
 .options {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   margin-top: var(--gap);
 }
+
 .chip {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  padding: 8px 12px;
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: transform 0.15s ease;
+  transition: all 0.2s ease;
+  color: #1f1f1f;
 }
+
 .chip:hover {
-  transform: scale(1.05);
+  background-color: #e8f0fe;
+  border-color: #c4d2ee;
 }
+
+/* === Footer / zone de saisie === */
 .footer form {
   display: flex;
   gap: 8px;
   align-items: center;
 }
+
 .footer input {
   flex: 1;
   padding: 12px;
@@ -96,6 +142,7 @@ body, html {
   border-radius: 24px;
   font-size: 1rem;
 }
+
 .btn-send {
   width: 48px;
   height: 48px;
@@ -106,117 +153,37 @@ body, html {
   font-size: 1.2rem;
   cursor: pointer;
 }
-@media (max-width: 360px) {
-  .container {
-    padding: 16px;
-  }
-  .btn-send, .footer input {
-    height: 40px;
-  }
-}
 
-/* === Positionner la container en bas === */
-.container {
-  position: sticky;
-  width: 100%;
-  bottom: calc(env(safe-area-inset-bottom) + 16px);             /* distance du bas, ajustable */
-  
-  margin: 0;                /* annule le centering vertical */
-  max-height: auto;         /* permet à la boîte de croître vers le haut */
-}
-/* === END positioning tweak === */
-
-/* === Positionner la container en bas === */
-.container {
-  position: sticky;
-  width: 100%;
-  bottom: calc(env(safe-area-inset-bottom) + 16px);             /* distance du bas, ajustable */
-  
-  margin: 0;                /* annule le centering vertical */
-  max-height: auto;         /* permet à la boîte de croître vers le haut */
-}
-/* === END positioning tweak === */
-
-/* === FORCE bottom anchoring for chat container === */
-.container {
-  position: fixed !important;
-  top: auto !important;
-  bottom: 24px !important;        /* ajustable */
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  margin: 0 !important;
-}
-/* Remove any centering vertical */
-.container { margin-top: 0 !important; }
-/* === END anchoring patch === */
-
-/* === Responsive Chat Container === */
-.container {
-  position: fixed !important;
-  bottom: 24px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 90vw;
-  padding: 0 16px 16px; background: transparent; display: flex; justify-content: center;
-  padding: 16px;
-  box-sizing: border-box;
-  border-radius: 16px;
-  background: var(--glass);
-}
-
-/* Mobile portrait */
-@media (max-width: 360px) {
+/* === Responsive === */
+@media (max-width: 480px) {
   .container {
     width: 95vw;
     bottom: 16px;
     padding: 12px;
     border-radius: 12px;
+    top: 24px;
   }
+
   .header h1 { font-size: 1rem; }
   .footer input { font-size: 0.9rem; padding: 8px; }
   .btn-send { width: 40px; height: 40px; }
 }
 
-/* Small tablets */
-@media (min-width: 361px) and (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 768px) {
   .container {
     width: 85vw;
     max-width: 500px;
     padding: 20px;
     border-radius: 14px;
   }
+
   .header h1 { font-size: 1.1rem; }
 }
 
-/* Desktops */
 @media (min-width: 769px) {
   .container {
     width: 400px;
     padding: 24px;
     border-radius: 16px;
   }
-}
-
-/* Assure-toi que l’historique laisse toujours de la place pour la footer */
-.history {
-  padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom) + 60px);
-}
-/* === End Responsive Chat Container === */
-
-/* === Mobile top spacing === */
-@media (max-width: 480px) {
-  .container {
-    top: 24px !important;    /* garde 24px sous la barre de statut */
-  }
-}
-
-/* === Contact button style update === */
-.btn-contact {
-  background: #ffffff !important;
-  color: rgba(255,255,255,0.5) !important; /* lettres semi-transparentes */
-  border: 1px solid rgba(255,255,255,0.5) !important;
-}
-.btn-contact:hover {
-  color: rgba(255,255,255,0.8) !important;
-  border-color: rgba(255,255,255,0.8) !important;
 }

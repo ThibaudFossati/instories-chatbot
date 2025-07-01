@@ -12,25 +12,44 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const historyRef = useRef(null);
 
+  // 🔁 Scroll automatique vers le bas à chaque nouveau message
   useEffect(() => {
     historyRef.current?.scrollTo(0, historyRef.current.scrollHeight);
   }, [messages, options, loading]);
 
+  // 💡 Génère une réponse enrichie + 3 suggestions créatives
+  const enrichResponse = (userText, botReply) => {
+    return {
+      enriched: `Vous avez dit : "${userText}". Voici trois pistes créatives que cela m'inspire :\n\n${botReply}`,
+      suggestions: [
+        "Transformer cette idée en visuel fort",
+        "Explorer sa dimension émotionnelle",
+        "L'inscrire dans une narration inattendue"
+      ]
+    };
+  };
+
+  // 📤 Envoie le message et récupère la réponse du bot
   const sendMessage = async (text) => {
     if (!text.trim()) return;
     const userMsg = { id: Date.now(), text, from: 'user' };
     setMessages(msgs => [...msgs, userMsg]);
     setOptions([]);
     setLoading(true);
+
     try {
       const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text })
       });
+
       const { reply } = await res.json();
-      setMessages(msgs => [...msgs, { id: Date.now() + 1, text: reply, from: 'bot' }]);
-      setOptions(['Idée A', 'Idée B', 'Idée C']);
+      const { enriched, suggestions } = enrichResponse(text, reply);
+
+      setMessages(msgs => [...msgs, { id: Date.now() + 1, text: enriched, from: 'bot' }]);
+      setOptions(suggestions);
+
     } catch (err) {
       setMessages(msgs => [...msgs, { id: Date.now() + 2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
     } finally {
@@ -56,15 +75,23 @@ export default function App() {
         {messages.map(m => (
           <div key={m.id} className={`bubble ${m.from}`}>{m.text}</div>
         ))}
-        {loading
-          ? <Loader />
-          : options.length > 0 && (
-              <div className="options">
-                {options.map(opt => (
-                  <button key={opt} onClick={() => sendMessage(opt)} className="chip">{opt}</button>
-                ))}
-              </div>
-            )}
+        {loading ? (
+          <Loader />
+        ) : (
+          options.length > 0 && (
+            <div className="options">
+              {options.map(opt => (
+                <button
+                  key={opt}
+                  onClick={() => sendMessage(opt)}
+                  className="chip"
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          )
+        )}
       </div>
 
       <footer className="footer">
@@ -73,7 +100,7 @@ export default function App() {
           sendMessage(e.target.input.value);
           e.target.reset();
         }}>
-          <input name="input" placeholder="Votre message…" />
+          <input name="input" placeholder="Votre message…" autoComplete="off" />
           <button type="submit" className="btn-send">➤</button>
         </form>
       </footer>
