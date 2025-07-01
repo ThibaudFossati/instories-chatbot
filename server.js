@@ -19,14 +19,7 @@ app.use((req, res, next) => {
 });
 // Static + SPA fallback
 app.use(express.static(path.join(__dirname, 'dist')));
-app.get('/*', (req, res) =>
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-
-app.post('/api/chat', express.json(), async (req, res) => {
-  try {
-    const reply = await generateReply(req.body.message);
-    res.json({ reply });
-  } catch (err) {
+});  } catch (err) {
     console.error(err);
     res.status(500).json({ reply: "Désolé, une erreur est survenue." });
   }
@@ -35,4 +28,7 @@ app.post('/api/chat', express.json(), async (req, res) => {
 
 app.listen(PORT, () => {
   console.log("InStories bot running on http://localhost:" + PORT);
+});
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
