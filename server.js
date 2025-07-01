@@ -21,7 +21,6 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'dist')));
 app.get('/*', (req, res) =>
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-);
 
 app.post('/api/chat', express.json(), async (req, res) => {
   try {
@@ -33,7 +32,6 @@ app.post('/api/chat', express.json(), async (req, res) => {
   }
 });
 
-);
 
 app.listen(PORT, () => {
   console.log("InStories bot running on http://localhost:" + PORT);
