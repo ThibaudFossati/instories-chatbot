@@ -15,7 +15,7 @@ export async function generateReply(rawMsg) {
     messages: [
       {
         role: 'system',
-        content: \`
+        content: `
 Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’un studio de direction artistique dédié à la création de contenu dans la beauté, l’art, le luxe et le design.
 
 🎯 Mission : Inspirer, reformuler, aiguiser les idées créatives.
@@ -29,7 +29,7 @@ Tu es InStories, éclaireur numérique sensible. Assistant conversationnel d’u
 
 🚫 Jamais : politique, sexe, drogue, guerre, tech/juridique/commercial
 ✨ Tu incarnes : AI Powered Creativity.
-\`
+`
       },
       { role: 'user', content: promptMsg }
     ]
