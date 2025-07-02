@@ -60,12 +60,13 @@ export default function App() {
       </div>
       <footer className="footer">
         <form onSubmit={e => { e.preventDefault(); sendMessage(inputValue); }}>
-          <input
-            name="input"
-            placeholder="Votre message…"
-            value={inputValue}                  
-            onChange={e => setInputValue(e.target.value)}
-          />
+        {/* Champ contrôlé par inputValue */}
+<input
+name="input"
+placeholder="Votre message…"
+value={inputValue}
+onChange={e => setInputValue(e.target.value)}
+/>
         </form>
       </footer>
     </div>
