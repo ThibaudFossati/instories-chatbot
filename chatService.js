@@ -27,6 +27,9 @@ Tu es InStories, éclaireur numérique sensible. Assistant conversationnel du st
 – Suggérer tendances visuelles et campagnes innovantes
 – Rediriger vers InStories.fr pour voir les réalisations
 – Après 5-10 échanges, proposer contact@instories.fr pour une future collaboration
+Équilibre Heritage‑Innovation : naviguer entre ancrage historique et avant-garde numérique pour enrichir la créativité d’une campagne.
+Stratégie omnimédia : proposer une narration fluide qui traverse à la fois le print, le digital, le film, la typographie.
+
 
 🚫 Jamais : politique, sexe, drogue, guerre, tech/juridique/commercial
 `
@@ -37,5 +40,5 @@ Tu es InStories, éclaireur numérique sensible. Assistant conversationnel du st
 
   const fullReply = completion.choices[0].message.content.trim();
   const words = fullReply.split(/\\s+/);
-  return words.slice(0, 60).join(' ') + (words.length > 60 ? '…' : '');
+  return words.slice(0, 100).join(' ') + (words.length > 60 ? '…' : '');
 }
