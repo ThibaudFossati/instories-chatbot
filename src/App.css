@@ -5,128 +5,11 @@
   --radius: 16px;
   --pad: 24px;
   --gap: 12px;
+  --loader-size: 8px;    /* Op. 3 */
+  --loader-gap: 6px;     /* Op. 3 */
 }
 
-body, html {
-  margin: 0;
-  height: 100%;
-  font-family: system-ui, sans-serif;
-  background: var(--bg-gradient);
-}
-
-/* === Container principal === */
-.container {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90vw;
-  max-width: 400px;
-  background: var(--glass);
-  backdrop-filter: blur(8px);
-  border-radius: var(--radius);
-  padding: var(--pad);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* === Header === */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--gap);
-}
-
-.header h1 {
-  font-size: 1.2rem;
-  color: #fff;
-}
-
-.btn-contact {
-  background: #ffffff;
-  color: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 4px 8px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-contact:hover {
-  color: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.8);
-}
-
-/* === Historique === */
-.history {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-  margin-bottom: var(--gap);
-  padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom) + 60px);
-}
-
-/* === Bulles utilisateur / bot === */
-.bubble {
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  font-size: 15px;
-  line-height: 1.5;
-  max-width: 80%;
-  white-space: pre-line;
-  animation: fadeInUp 0.3s ease both;
-}
-
-.bubble.user {
-  background: #e8f0fe;
-  color: #202124;
-  align-self: flex-end;
-}
-
-.bubble.bot {
-  background: #f1f3f4;
-  color: #202124;
-  align-self: flex-start;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* === Suggestions dynamiques === */
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: var(--gap);
-}
-
-.chip {
-  background: #ffffff;
-  border: 1px solid #dadce0;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #1f1f1f;
-}
-
-.chip:hover {
-  background-color: #e8f0fe;
-  border-color: #c4d2ee;
-}
+/* … le reste inchangé … */
 
 /* === Footer / zone de saisie === */
 .footer form {
@@ -142,20 +25,7 @@ body, html {
   border-radius: 24px;
   font-size: 1rem;
 }
-
-
-/* === Responsive === */
-@media (max-width: 480px) {
-  .container {
-    width: 95vw;
-    bottom: 16px;
-    padding: 12px;
-    border-radius: 12px;
-
-  }
-
-  .header h1 { font-size: 1rem; }
-  .footer input { font-size: 0.9rem; padding: 8px; }
+}  /* Op. 1 : ferme @media (max-width:480px) */
 
 @media (min-width: 481px) and (max-width: 768px) {
   .container {
@@ -176,8 +46,38 @@ body, html {
   }
 }
 
-/* Button “Contact” épuré */
+/* Op. 2 : suppression de .btn-contact  */
+/* === Button “Contact” épuré === */
+.btn-new {
+  background: none; /* Op. 5 */
+  border: none;
+  padding: 4px 8px;
+  font-size: 1rem;
+  color: var(--accent);
+  cursor: pointer;
+}
 .btn-new:hover {
   text-decoration: underline;
 }
+
+/* Op. 4 : loader animé */
+.loader {
+  display: flex;
+  gap: var(--loader-gap);
+  justify-content: center;
+  margin: var(--gap) 0;
+}
+.loader span {
+  width: var(--loader-size);
+  height: var(--loader-size);
+  background: var(--accent);
+  border-radius: 50%;
+  animation: loader-bounce 0.6s infinite ease-in-out both;
+}
+.loader span:nth-child(1) { animation-delay: -0.32s; }
+.loader span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loader-bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40%              { transform: scale(1); opacity: 1; }
 }
