@@ -1,37 +1,44 @@
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
-import { OpenAI } from 'openai';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
 app.use(cors());
 app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
-  const { message } = req.body;
-
-  const prompt = `Tu es InStories, éclaireur numérique sensible. Assistant créatif pour des campagnes beauté, luxe, design. Adopte un ton élégant, structuré, inspirant. Voici l'idée à traiter : "${message}"`;
+  const userMessage = req.body.message;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: 'Tu es un assistant conversationnel haut de gamme, inspiré, expert en storytelling.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7,
-    });
-
-    const reply = completion.choices[0].message.content;
+    const reply = await getBotResponse(userMessage);
     res.json({ reply });
-  } catch (err) {
-    console.error('❌ Erreur API OpenAI :', err.message);
-    res.status(500).json({ reply: 'Une erreur est survenue. Veuillez réessayer plus tard.' });
+  } catch (error) {
+    console.error('Erreur API:', error);
+    res.status(500).json({ reply: '❌ Erreur serveur' });
   }
 });
 
-app.listen(3001, () => {
-  console.log('✅ Serveur backend lancé sur http://localhost:3001');
-});
+async function getBotResponse(message) {
+  const OPENAI_KEY = process.env.OPENAI_API_KEY;
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + OPENAI_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: message }]
+    })
+  });
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || 'Pas de réponse.';
+}
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log('✅ Server running at http://localhost:' + PORT));

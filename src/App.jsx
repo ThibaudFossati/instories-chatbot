@@ -1,25 +1,20 @@
-// 💡 AJOUTER ICI ton composant QuickReplies
+// ...
 import QuickReplies from './components/QuickReplies';
 
-import InStoriesChecklist from './components/InStoriesChecklist';
-import React, { useState, useEffect, useRef } from 'react';
-import './App.css';
-
 export default function App() {
-  const [msgs, setMsgs]         = useState([{ id:1, text:'Bienvenue ! Posez votre question.', from:'bot' }]);
-  const [loading, setLoading]   = useState(false);
+  const [msgs, setMsgs] = useState([{ id: 1, text: 'Bonjour, je suis InStories bot. Je suis votre assistant créatif.', from: 'bot' }]);
+  const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const historyRef = useRef();
 
-  // 🔄 scroll en bas à chaque nouveau message
+  // 🔄 scroll automatique
   useEffect(() => {
     historyRef.current?.scrollTo(0, historyRef.current.scrollHeight);
   }, [msgs]);
 
   const sendMessage = async (text) => {
     if (!text.trim()) return;
-    // ajoute message utilisateur
-    setMsgs(prev => [...prev, { id:Date.now(), text, from:'user' }]);
+    setMsgs(prev => [...prev, { id: Date.now(), text, from: 'user' }]);
     setLoading(true);
     try {
       const res = await fetch('/api/chat', {
@@ -28,10 +23,9 @@ export default function App() {
         body: JSON.stringify({ message: text })
       });
       const { reply } = await res.json();
-      // ajoute réponse bot
-      setMsgs(prev => [...prev, { id:Date.now()+1, text: reply, from:'bot' }]);
+      setMsgs(prev => [...prev, { id: Date.now() + 1, text: reply, from: 'bot' }]);
     } catch {
-      setMsgs(prev => [...prev, { id:Date.now()+2, text:'❌ Erreur, réessaie.', from:'bot' }]);
+      setMsgs(prev => [...prev, { id: Date.now() + 2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
     } finally {
       setLoading(false);
       setInputValue('');
@@ -44,7 +38,7 @@ export default function App() {
         <h1>InStories Chat</h1>
         <button
           className="btn-new"
-          onClick={() => window.open('mailto:contact@instories.fr','_blank')}
+          onClick={() => window.open('mailto:contact@instories.fr', '_blank')}
         >
           Contact
         </button>
@@ -58,38 +52,25 @@ export default function App() {
         ))}
         {loading && (
           <div className="loader">
-            <span/><span/><span/>
+            <span /><span /><span />
           </div>
         )}
       </div>
 
-      {/* ✅ INSERTION SÛRE DU COMPOSANT QUICKREPLIES ICI */}
+      {/* ✅ QuickReplies bien intégré */}
       <QuickReplies
-        items={[
-          { label: 'Qui es-tu ?', value: '/profile' },
-          { label: 'Tes projets ?', value: '/projects' },
-          { label: 'Analyser ce brief', value: '/analyze' }
-        ]}
-        onSelect={(item) => setInputValue(item.value)}
+        lastUserMessage={inputValue}
+        onSend={sendMessage}
       />
-      <QuickReplies
-        items={[
-          { label: 'Qui es-tu ?', value: '/profile' },
-          { label: 'Tes projets ?', value: '/projects' },
-          { label: 'Analyser ce brief', value: '/analyze' }
-        ]}
-        onSelect={(item) => setInputValue(item.value)}
-      />
+
       <footer className="footer">
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            sendMessage(inputValue);
-          }}
-        >
+        <form onSubmit={e => {
+          e.preventDefault();
+          sendMessage(inputValue);
+        }}>
           <input
             name="input"
-            placeholder="Ask, write or search for anything..."
+            placeholder="Demandez une idée, un style, une stratégie..."
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
           />

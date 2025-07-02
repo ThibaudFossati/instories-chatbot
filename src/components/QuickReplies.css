@@ -1,22 +1,23 @@
 .quick-replies {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 0.5rem;
   margin: 1rem 0;
 }
 
-.quick-reply {
-  background: white;
-  color: var(--accent);
-  font-weight: 500;
-  border-radius: 999px;
-  padding: 8px 25px;
-  font-size: 0.9rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
+.quick-replies button {
+  flex: 1 1 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
 }
 
-.quick-reply:hover {
-  background: #84d2fc;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+.quick-replies button:hover {
+  background-color: #ddd;
 }
