@@ -27,7 +27,7 @@ body, html {
   max-width: 400px;
   background: var(--glass);
   backdrop-filter: blur(8px);
-  border-radius: var(--radius);
+  border-radius: 16px 16px 4px 16px;
   padding: var(--pad);
   box-sizing: border-box;
   display: flex;
@@ -75,7 +75,7 @@ body, html {
 /* === Bulles utilisateur / bot === */
 .bubble {
   padding: 12px 16px;
-  border-radius: var(--radius);
+  border-radius: 16px 16px 4px 16px;
   font-size: 15px;
   line-height: 1.5;
   max-width: 80%;
@@ -84,13 +84,13 @@ body, html {
 }
 
 .bubble.user {
-  background: #e8f0fe;
+  background: rgba(232,240,254,0.6);
   color: #202124;
   align-self: flex-end;
 }
 
 .bubble.bot {
-  background: #f1f3f4;
+  background: rgba(241,243,244,0.6);
   color: #202124;
   align-self: flex-start;
 }
