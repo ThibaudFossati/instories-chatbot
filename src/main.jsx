@@ -1,3 +1,4 @@
+document.documentElement.classList.remove('dark');
 import "./App.css";
 import './styles/global.css';
 import { StrictMode } from 'react'
