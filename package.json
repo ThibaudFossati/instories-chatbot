@@ -8,13 +8,15 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:server": "node src/server.js"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "jspdf": "^3.0.1",
-    "openai": "^5.5.0",
+    "openai": "^5.8.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "usehooks-ts": "^3.1.1"

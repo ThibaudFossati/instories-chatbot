@@ -1,3 +1,6 @@
+// 💡 AJOUTER ICI ton composant QuickReplies
+import QuickReplies from './components/QuickReplies';
+
 import InStoriesChecklist from './components/InStoriesChecklist';
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
@@ -60,6 +63,23 @@ export default function App() {
         )}
       </div>
 
+      {/* ✅ INSERTION SÛRE DU COMPOSANT QUICKREPLIES ICI */}
+      <QuickReplies
+        items={[
+          { label: 'Qui es-tu ?', value: '/profile' },
+          { label: 'Tes projets ?', value: '/projects' },
+          { label: 'Analyser ce brief', value: '/analyze' }
+        ]}
+        onSelect={(item) => setInputValue(item.value)}
+      />
+      <QuickReplies
+        items={[
+          { label: 'Qui es-tu ?', value: '/profile' },
+          { label: 'Tes projets ?', value: '/projects' },
+          { label: 'Analyser ce brief', value: '/analyze' }
+        ]}
+        onSelect={(item) => setInputValue(item.value)}
+      />
       <footer className="footer">
         <form
           onSubmit={e => {
