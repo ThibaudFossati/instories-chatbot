@@ -5,11 +5,70 @@
   --radius: 16px;
   --pad: 24px;
   --gap: 12px;
-  --loader-size: 8px;    /* Op. 3 */
-  --loader-gap: 6px;     /* Op. 3 */
+  --loader-size: 8px;
+  --loader-gap: 6px;
 }
 
-/* … le reste inchangé … */
+body, html {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  background: var(--bg-gradient);
+}
+
+/* === Container principal === */
+.container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 400px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* === Header === */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--gap);
+}
+
+.header h1 {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+/* === Historique === */
+.history {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+  padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom) + 60px);
+}
+
+/* === Bulles utilisateur / bot === */
+.bubble {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 80%;
+  white-space: pre-line;
+  animation: fadeInUp 0.3s ease both;
+}
+/*… (le reste des bulles, options, etc. inchangé) …*/
 
 /* === Footer / zone de saisie === */
 .footer form {
@@ -25,7 +84,18 @@
   border-radius: 24px;
   font-size: 1rem;
 }
-}  /* Op. 1 : ferme @media (max-width:480px) */
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  .container {
+    width: 95vw;
+    bottom: 16px;
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .header h1 { font-size: 1rem; }
+  .footer input { font-size: 0.9rem; padding: 8px; }
+}
 
 @media (min-width: 481px) and (max-width: 768px) {
   .container {
@@ -34,7 +104,6 @@
     padding: 20px;
     border-radius: 14px;
   }
-
   .header h1 { font-size: 1.1rem; }
 }
 
@@ -46,10 +115,9 @@
   }
 }
 
-/* Op. 2 : suppression de .btn-contact  */
-/* === Button “Contact” épuré === */
+/* Button “Contact” épuré */
 .btn-new {
-  background: none; /* Op. 5 */
+  background: none;
   border: none;
   padding: 4px 8px;
   font-size: 1rem;
@@ -60,7 +128,7 @@
   text-decoration: underline;
 }
 
-/* Op. 4 : loader animé */
+/* === Loader animé à trois ronds === */
 .loader {
   display: flex;
   gap: var(--loader-gap);
@@ -79,5 +147,5 @@
 
 @keyframes loader-bounce {
   0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-  40%              { transform: scale(1); opacity: 1; }
+  40%            { transform: scale(1); opacity: 1; }
 }
