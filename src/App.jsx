@@ -68,7 +68,7 @@ export default function App() {
         >
           <input
             name="input"
-            placeholder="Tapez votre message…"
+            placeholder="Ask, write or search for anything..."
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
           />

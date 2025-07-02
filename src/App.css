@@ -19,12 +19,12 @@ body, html {
 /* === Container principal === */
 .container {
   position: fixed;
-  bottom: 24px;
+  top: 10vh;           /* on laisse 10% d’espace en haut */
+  bottom: 10vh;        /* et 10% en bas */
   left: 50%;
   transform: translateX(-50%);
   width: 90vw;
   max-width: 400px;
-  height: 80vh;                /* ← hauteur fixe */
   background: var(--glass);
   backdrop-filter: blur(8px);
   border-radius: var(--radius);
@@ -32,7 +32,6 @@ body, html {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  /* on retire justify-content:center pour que .history puisse défiler */
 }
 
 /* === Header === */
@@ -46,6 +45,7 @@ body, html {
 .header h1 {
   font-size: 1.2rem;
   color: #fff;
+  margin: 0;
 }
 
 /* bouton “Contact” épuré */
@@ -61,10 +61,10 @@ body, html {
   text-decoration: underline;
 }
 
-/* === Historique === */
+/* === Historique scrollable === */
 .history {
-  flex: 1;                     /* prend tout l’espace vertical restant */
-  overflow-y: auto;            /* active le scroll vertical */
+  flex: 1;               /* prend tout l’espace vertical restant */
+  overflow-y: auto;      /* scroll vertical */
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -95,6 +95,7 @@ body, html {
   align-self: flex-start;
 }
 
+/* === Animation bulles qui apparaissent === */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -106,7 +107,7 @@ body, html {
   }
 }
 
-/* === Loader animé à trois ronds === */
+/* === Loader animé à trois pastilles === */
 .loader {
   display: flex;
   gap: var(--loader-gap);
@@ -146,8 +147,8 @@ body, html {
 /* === Responsive mobile === */
 @media (max-width: 480px) {
   .container {
-    height: 90vh;
-    bottom: 16px;
+    top: 5vh;
+    bottom: 5vh;
     padding: 12px;
     border-radius: 12px;
   }
