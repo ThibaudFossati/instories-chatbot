@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import InStoriesChecklist from './components/checklist/InStoriesChecklist';
-import './App.css';
+import QuickReplies from './components/QuickReplies';
+import { suggestionsByTheme } from './data/checklist';
+import './styles/global.css';
 
 export default function App() {
-  const [msgs, setMsgs] = useState([
-    { id: 1, text: 'Bienvenue ! Posez votre question.', from: 'bot' }
-  ]);
+  const [msgs, setMsgs] = useState([{ id: 1, text: 'Bienvenue ! Posez votre question.', from: 'bot' }]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [showChecklist, setShowChecklist] = useState(false);
+  const [theme, setTheme] = useState('accueil');
   const historyRef = useRef();
 
   useEffect(() => {
-    const node = historyRef.current;
-    if (node) node.scrollTop = node.scrollHeight;
+    historyRef.current?.scrollTo(0, historyRef.current.scrollHeight);
   }, [msgs]);
 
-  const sendMessage = async (text) => {
+  const pushMsg = (text, from = 'user') => setMsgs(prev => [...prev, { id: Date.now(), text, from }]);
+
+  const sendMessage = async text => {
     if (!text.trim()) return;
-    setMsgs(prev => [...prev, { id: Date.now(), text, from: 'user' }]);
+    pushMsg(text, 'user');
     setLoading(true);
     try {
       const res = await fetch('/api/chat', {
@@ -26,10 +26,11 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text })
       });
-      const { reply } = await res.json();
-      setMsgs(prev => [...prev, { id: Date.now()+1, text: reply, from: 'bot' }]);
+      const { reply, nextTheme } = await res.json();
+      pushMsg(reply, 'bot');
+      if (nextTheme) setTheme(nextTheme);
     } catch {
-      setMsgs(prev => [...prev, { id: Date.now()+2, text: '❌ Erreur, HH réessaie. ', from: 'bot' }]);
+      pushMsg('❌ Erreur, réessaie.', 'bot');
     } finally {
       setLoading(false);
       setInputValue('');
@@ -40,40 +41,23 @@ export default function App() {
     <div className="container">
       <header className="header">
         <h1>InStories Chat</h1>
-        <button className="btn-new" onClick={() => setShowChecklist(!showChecklist)}>
-          {showChecklist ? '💬 Revenir au Chat' : '🗂️ Voir Checklist'}
-        </button>
       </header>
 
-      {showChecklist ? (
-        <InStoriesChecklist />
-      ) : (
-        <>
-          <div className="history" ref={historyRef}>
-            {msgs.map(m => (
-              <div key={m.id} className={`bubble ${m.from}`}>
-                {m.text}
-              </div>
-            ))}
-            {loading && (
-              <div className="loader"><span/><span/><span/></div>
-            )}
-          </div>
+      <div className="history" ref={historyRef}>
+        {msgs.map(m => <div key={m.id} className={`bubble ${m.from}`}>{m.text}</div>)}
+        {loading && <div className="loader"><span/><span/><span/></div>}
+        <QuickReplies list={suggestionsByTheme[theme] || []} onSelect={sendMessage}/>
+      </div>
 
-          <footer className="footer">
-            <form onSubmit={e => { e.preventDefault(); sendMessage(inputValue); }}>
-              <input
-                name="input"
-                placeholder="Votre message…"
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                autoComplete="off"
-              />
-              <button type="submit" className="btn-send">➤</button>
-            </form>
-          </footer>
-        </>
-      )}
+      <form className="footer" onSubmit={e => { e.preventDefault(); sendMessage(inputValue); }}>
+        <input
+          placeholder="Votre message…"
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          autoComplete="off"
+        />
+        <button type="submit" className="btn-send">➤</button>
+      </form>
     </div>
   );
 }
