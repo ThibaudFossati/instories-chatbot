@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import InStoriesChecklist from './components/checklist/InStoriesChecklist';
 import './App.css';
 
 export default function App() {
@@ -7,14 +8,15 @@ export default function App() {
   ]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [showChecklist, setShowChecklist] = useState(false);
   const historyRef = useRef();
 
   useEffect(() => {
     const node = historyRef.current;
-    if (node) node.scrollTop = node.scrollHeight; // autoscroll
+    if (node) node.scrollTop = node.scrollHeight;
   }, [msgs]);
 
-  const sendMessage = async text => {
+  const sendMessage = async (text) => {
     if (!text.trim()) return;
     setMsgs(prev => [...prev, { id: Date.now(), text, from: 'user' }]);
     setLoading(true);
@@ -27,7 +29,7 @@ export default function App() {
       const { reply } = await res.json();
       setMsgs(prev => [...prev, { id: Date.now()+1, text: reply, from: 'bot' }]);
     } catch {
-      setMsgs(prev => [...prev, { id: Date.now()+2, text: '❌ Erreur, réessaie.', from: 'bot' }]);
+      setMsgs(prev => [...prev, { id: Date.now()+2, text: '❌ Erreur, HH réessaie. ', from: 'bot' }]);
     } finally {
       setLoading(false);
       setInputValue('');
@@ -38,34 +40,40 @@ export default function App() {
     <div className="container">
       <header className="header">
         <h1>InStories Chat</h1>
-        <button className="btn-new" onClick={() => window.open('mailto:contact@instories.fr','_blank')}>
-          Contact
+        <button className="btn-new" onClick={() => setShowChecklist(!showChecklist)}>
+          {showChecklist ? '💬 Revenir au Chat' : '🗂️ Voir Checklist'}
         </button>
       </header>
 
-      <div className="history" ref={historyRef}>
-        {msgs.map(m => (
-          <div key={m.id} className={`bubble ${m.from}`}>
-            {m.text}
+      {showChecklist ? (
+        <InStoriesChecklist />
+      ) : (
+        <>
+          <div className="history" ref={historyRef}>
+            {msgs.map(m => (
+              <div key={m.id} className={`bubble ${m.from}`}>
+                {m.text}
+              </div>
+            ))}
+            {loading && (
+              <div className="loader"><span/><span/><span/></div>
+            )}
           </div>
-        ))}
-        {loading && (
-          <div className="loader"><span/><span/><span/></div>
-        )}
-      </div>
 
-      <footer className="footer">
-        <form onSubmit={e => { e.preventDefault(); sendMessage(inputValue); }}>
-          <input
-            name="input"
-            placeholder="Votre message…"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            autoComplete="off"
-          />
-          <button type="submit" className="btn-send">➤</button>
-        </form>
-      </footer>
+          <footer className="footer">
+            <form onSubmit={e => { e.preventDefault(); sendMessage(inputValue); }}>
+              <input
+                name="input"
+                placeholder="Votre message…"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                autoComplete="off"
+              />
+              <button type="submit" className="btn-send">➤</button>
+            </form>
+          </footer>
+        </>
+      )}
     </div>
   );
 }
