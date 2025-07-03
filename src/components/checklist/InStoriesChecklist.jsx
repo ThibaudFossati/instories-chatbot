@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 
 const profils = {
-  'Directeur Artistique': [...],
-  'Social Media Manager': [...],
-  // etc. (garde ton contenu ici)
+  'Directeur Artistique': ['Stratégie visuelle', 'Moodboard', 'Direction de shooting'],
+  'Social Media Manager': ['Calendrier éditorial', 'Formats Reels', 'Tonalité de marque']
 };
 
 export default function InStoriesChecklist() {
