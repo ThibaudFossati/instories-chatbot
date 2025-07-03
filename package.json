@@ -1,15 +1,17 @@
 {
   "name": "instories-chatbot",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "backend": "node server.js",
+    "frontend": "vite --port 5173",
+    "dev": "concurrently \"npm:backend\" \"npm:frontend\"",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
+    "lint": "eslint .",
     "start": "node server.js",
-    "start:server": "node src/server.js"
+    "start:watch": "nodemon server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -28,11 +30,13 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "concurrently": "^8.2.2",
     "eslint": "^9.30.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.0.0",
+    "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "vite": "^6.3.5"
   },
