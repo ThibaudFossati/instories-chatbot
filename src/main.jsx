@@ -1,6 +1,6 @@
 document.documentElement.classList.remove('dark');
 import "./App.css";
-import './styles/global.css';
+import './global.css';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
