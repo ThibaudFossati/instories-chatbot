@@ -4,7 +4,7 @@ import { suggestionsByTheme } from './data/checklist';
 import './styles/global.css';
 
 export default function App() {
-  const [msgs, setMsgs] = useState([{ id: 1, text: 'Bienvenue ! Posez votre question.', from: 'bot' }]);
+  const [msgs, setMsgs] = useState([{ id: 1, text: 'Je suis votre concierge créatif ; chuchotez vos envies, repartez avec un concept signature digne des maisons d’exception.', from: 'bot' }]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [theme, setTheme] = useState('accueil');
