@@ -10,3 +10,7 @@ build
 .env
 .env\nnode_modules
 .env
+
+# Vite output
+.vite/
+dist/
