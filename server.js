@@ -8,7 +8,7 @@ import { generateReply } from './chatService.js';
 dotenv.config();
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 10001;
 
 // Sécurité iframe
 app.use((req, res, next) => {
