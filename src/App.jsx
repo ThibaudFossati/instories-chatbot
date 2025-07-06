@@ -57,15 +57,17 @@ export default function App() {
       </header>
       <div className="history" ref={historyRef}>
         {msgs.map((m) => (
-          <div key={m.id} className={`bubble ${m.from}`}>
+          <div key={m.id} className={`bubble ${m.from} animate`}>
             {m.text}
           </div>
         ))}
         {loading && (
-          <div className="loader">
-            <span />
-            <span />
-            <span />
+          <div className="bubble bot">
+            <div className="loader">
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
         )}
         <QuickReplies list={suggestionsByTheme[theme] || []} onSelect={sendMessage} />

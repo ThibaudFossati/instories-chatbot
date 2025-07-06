@@ -2,9 +2,34 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 
 const profils = {
-  'Directeur Artistique': [...],
-  'Social Media Manager': [...],
-  // etc. (garde ton contenu ici)
+  'Directeur Artistique': [
+    'Élaborer un moodboard',
+    'Définir les couleurs',
+    'Sélectionner les typographies',
+    'Composer des layouts attractifs',
+    'Choisir le bon format créatif'
+  ],
+  'Social Media Manager': [
+    'Planifier les publications',
+    'Analyser les insights',
+    'Définir les KPIs',
+    'Organiser une campagne',
+    'Segmenter l’audience'
+  ],
+  'Content Creator': [
+    'Tourner une vidéo',
+    'Préparer un script',
+    'Optimiser la lumière',
+    'Publier sur plusieurs plateformes',
+    'Utiliser les bons hashtags'
+  ],
+  'Chef de Projet': [
+    'Créer un planning de production',
+    'Attribuer les rôles',
+    'Contrôler les deadlines',
+    'Gérer les validations',
+    'Organiser une réunion de suivi'
+  ]
 };
 
 export default function InStoriesChecklist() {
