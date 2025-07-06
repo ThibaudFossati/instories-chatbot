@@ -31,6 +31,10 @@ html, body {
   font-family: var(--font-family);
   min-height: 100%;
   background: var(--bg-gradient);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   background-size: 400% 400%;
   animation: var(--bg-animation);
   -webkit-font-smoothing: antialiased;
@@ -60,6 +64,10 @@ body {
   padding: var(--pad);
   padding-inline: 16px;
   background: var(--glass);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   backdrop-filter: blur(12px);
   border-radius: var(--radius);
   display: flex;
@@ -96,6 +104,10 @@ body {
 
 .btn-new {
   background: none;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   color: var(--accent);
   font-size: 1rem;
   cursor: pointer;
@@ -118,7 +130,7 @@ body {
 }
 
 .bubble {
-  max-width: 90%;
+  max-width: 75%;
   margin-bottom: 10px;
   padding: 12px 16px;
   font-size: 15px;
@@ -127,18 +139,30 @@ body {
   border-radius: var(--radius);
   animation: fadeInUp 0.3s ease both;
   background: rgba(255, 255, 255, 0.5);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   color: #202124;
 }
 
 .bubble.user {
   align-self: flex-end;
   background: rgba(232, 240, 254, 0.6);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 16px 16px 4px 16px;
 }
 
 .bubble.bot {
   align-self: flex-start;
   background: rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 16px 16px 16px 4px;
 }
 
@@ -187,6 +211,10 @@ body {
   z-index: 20;
   backdrop-filter: blur(14px);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   pointer-events: none;
 }
 
@@ -195,6 +223,10 @@ body {
 
 .quick-reply {
   background: #fff;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 20px;
   padding: 8px 14px;
   font-size: 14px;
@@ -211,6 +243,10 @@ body {
 
 .quick-reply.active {
   background: var(--accent);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   color: white;
 }
 
@@ -226,20 +262,48 @@ body {
   width: calc(100% - 48px);
   max-width: 700px;
   background: transparent;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   padding: 10px 0;
   box-shadow: none;
 }
 
 .footer input {
+  outline: none;
+  box-shadow: none;
   flex: 1;
+  outline: none;
+  box-shadow: none;
   padding: 14px 20px;
+  outline: none;
+  box-shadow: none;
   font-size: 1rem;
+  outline: none;
+  box-shadow: none;
   border-radius: 24px;
+  outline: none;
+  box-shadow: none;
   border: 1px solid #ccc;
+  outline: none;
+  box-shadow: none;
   background: #fff;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: none;
   color: #222;
+  outline: none;
+  box-shadow: none;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  outline: none;
+  box-shadow: none;
 }
+  outline: none;
+  box-shadow: none;
 
 @media (max-width: 480px) {
   .container {
@@ -247,9 +311,17 @@ body {
     padding: 14px;
   }
   .footer input {
+  outline: none;
+  box-shadow: none;
     font-size: 1rem;
+  outline: none;
+  box-shadow: none;
     padding: 14px 18px;
+  outline: none;
+  box-shadow: none;
   }
+  outline: none;
+  box-shadow: none;
   .send-btn {
     width: 48px;
     height: 48px;
@@ -263,12 +335,20 @@ body::before {
   inset: 0;
   z-index: -1;
   background: var(--bg-gradient);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   background-size: 400% 400%;
   animation: var(--bg-animation);
 }
 :root {
   --accent: #7b9acc;
   --background: #fdfaf6;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   --text: #2e2e2e;
   --bubble-user: #e6f0ff;
   --bubble-bot: #f4f4f4;
@@ -280,18 +360,16 @@ body::before {
   --loader-gap: 8px;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 html,
 body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
   background: var(--background);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   color: var(--text);
   height: 100dvh;
   display: flex;
@@ -342,7 +420,7 @@ body {
 }
 
 .bubble {
-  max-width: 90%;
+  max-width: 75%;
   margin-bottom: 10px;
   padding: 12px 18px;
   font-size: 15px;
@@ -355,13 +433,30 @@ body {
 .bubble.user {
   align-self: flex-end;
   background: var(--bubble-user);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 16px 16px 4px 16px;
 }
 
 .bubble.bot {
   align-self: flex-start;
   background: var(--bubble-bot);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 16px 16px 16px 4px;
+}
+
+/* === Override bubble max-width === */
+.bubble,
+.bubble.user,
+.bubble.bot {
+  max-width: 60% !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
 }
 
 .footer {
@@ -376,28 +471,60 @@ body {
   width: calc(100% - 48px);
   max-width: 700px;
   background: transparent;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   padding: 10px 0;
   box-shadow: none;
 }
 
 .footer input {
+  outline: none;
+  box-shadow: none;
   flex: 1;
+  outline: none;
+  box-shadow: none;
   padding: 14px 20px;
+  outline: none;
+  box-shadow: none;
   font-size: 1rem;
+  outline: none;
+  box-shadow: none;
   border-radius: 24px;
+  outline: none;
+  box-shadow: none;
   border: 1px solid #ccc;
+  outline: none;
+  box-shadow: none;
   background: #fff;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: none;
   color: #222;
+  outline: none;
+  box-shadow: none;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  outline: none;
+  box-shadow: none;
 }
+  outline: none;
+  box-shadow: none;
 
 .send-btn {
   width: 48px;
   height: 48px;
   background: var(--accent);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 21px;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
@@ -411,6 +538,10 @@ body {
 .send-btn:hover {
   transform: scale(1.05);
   background: #0d1b56;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .send-btn::before {
@@ -439,7 +570,7 @@ body {
 
 @keyframes loader-bounce {
   0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-  40% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(1); opacity: 0,5; }
 }
 
 .quick-replies {
@@ -451,6 +582,10 @@ body {
 
 .quick-reply {
   background: #f8f8f8;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   border-radius: 20px;
   padding: 8px 14px;
   font-size: 14px;
@@ -461,6 +596,10 @@ body {
 
 .quick-reply:hover {
   background: #ececec;
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   transform: scale(1.05);
 }
 
@@ -469,6 +608,10 @@ body {
   font-size: 1rem;
   color: #111;
   background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  min-width: 80px;
+  font-weight: 600;
+  font-size: 1rem;
   backdrop-filter: blur(12px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -491,4 +634,32 @@ body {
   filter: blur(4px) brightness(0.9);
   opacity: 0.7;
   transition: all 0.3s ease;
+}
+.footer input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.send-btn::after {
+  content: "Envoyer";
+  color: #fff;
+  display: inline-block;
+}
+
+/* === Override loader sizing === */
+.bubble.loader {
+  padding: 6px 12px !important;
+  gap: 4px !important;
+  height: auto !important;
+}
+.bubble.loader span {
+  width: var(--loader-size) !important;
+  height: var(--loader-size) !important;
+}
+
+/* === Override loader styles === */
+.loader, .bubble.loader {
+  gap: var(--loader-gap) !important;
+  padding: 4px 8px !important;
+  height: auto !important;
 }
