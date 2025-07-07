@@ -14,3 +14,4 @@ build
 # Vite output
 .vite/
 dist/
+instories-chatbot/
