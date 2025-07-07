@@ -261,7 +261,7 @@ body {
   min-width: 80px;
   font-weight: 600;
   font-size: 1rem;
-  color: #111;
+  color: #38f200;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(12px);
   border-radius: 16px;
@@ -314,3 +314,13 @@ body {
     font-size: 1rem;
   }
 }
+/* === Fix bulle mobile pleine largeur === */
+@media (max-width:480px){
+  .bubble,.bubble.user,.bubble.bot{
+    max-width:92% !important;
+    word-wrap:break-word;
+  }
+}
+
+/* === auto-scroll padding */
+.history{padding-bottom:120px;}

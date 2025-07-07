@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QuickReplies from './components/QuickReplies';
 import { suggestionsByTheme } from './data/checklist';
-import './styles/global.css';
+
 
 export default function App() {
   const [msgs, setMsgs] = useState([
     {
       id: Date.now(),
       text:
-        "Je suis votre concierge créatif ; chuchotez vos envies, repartez avec un concept signature digne des maisons d’exception.",
+        "Je suis votre muse digitale : confiez-moi vos ambitions, et repartez avec des visuels et campagnes social-media qui font rêver.",
       from: "bot",
     },
   ]);
