@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 
 const profils = {
-  'Directeur Artistique': ['Stratégie visuelle', 'Moodboard', 'Direction de shooting'],
+  'Directeur Artistique': ['Stratégie visuelle', 'Moodboard', 'Direction de shooting', serie de visuels' ],
   'Social Media Manager': ['Calendrier éditorial', 'Formats Reels', 'Tonalité de marque']
 };
 
