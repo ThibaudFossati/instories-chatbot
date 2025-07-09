@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 
 const profils = {
-  'Directeur Artistique': ['Stratégie visuelle', 'Moodboard', 'Direction de shooting', serie de visuels' ],
+  'Directeur Artistique': ['Stratégie visuelle', 'Moodboard', 'Direction de shooting', ' ],
   'Social Media Manager': ['Calendrier éditorial', 'Formats Reels', 'Tonalité de marque']
 };
 
@@ -102,6 +102,7 @@ export default function InStoriesChecklist() {
           <p>✨ Vous souhaitez aller plus loin ?</p>
           <a href="mailto:contact@instories.fr" className="btn-new">
             ✉️ Contactez-nous : contact@instories.fr
+            Voir les créa : www.instories.fr
           </a>
         </div>
       )}

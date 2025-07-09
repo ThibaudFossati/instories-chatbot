@@ -8,7 +8,7 @@ export default function App() {
     {
       id: Date.now(),
       text:
-        "Je suis votre InStories bot – Studio Virtuel Prototype de Brief Créatif.",
+        "Je suis votre bot (Beta) InStories Prototype Virtuel de Brief Créatif.",
       from: "bot",
     },
   ]);
@@ -35,7 +35,18 @@ export default function App() {
         body: JSON.stringify({ message }),
       });
       const { reply, nextTheme } = await res.json();
-      pushMsg(reply, "bot");
+      // Fragmenter la réponse en plusieurs bulles sur double saut de ligne
+     // Découpage de la réponse en fragments
+const fragments = reply.split(/\n{2,}/).map(f => f.trim()).filter(Boolean);
+// Affichage fragment par fragment avec 600 ms de délai
+;(async () => {
+  for (const text of fragments) {
+    pushMsg(text, "bot");
+    // attente avant d’afficher le suivant
+    await new Promise(res => setTimeout(res, 600));
+  }
+})();
+      // après réception et découpage
       if (nextTheme) setTheme(nextTheme);
     } catch {
       pushMsg("❌ Erreur, réessaie.", "bot");

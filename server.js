@@ -44,3 +44,8 @@ app.listen(PORT, () => {
 });
 
 
+// src/server.js – fin de fichier
+const PORT = process.env.PORT || 10001;   // <— change 3001 → 10001
+app.listen(PORT, () => {
+  console.log('✅ InStories bot running on http://localhost:' + PORT);
+});

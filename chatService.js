@@ -33,5 +33,17 @@ Propose des formats : images statique, ou des films, ou des automatisations supt
     ]
   });
 
-  return completion.choices[0].message.content.trim().slice(0, 800) + '…';
+  // Split the AI response into smaller segments for separate bubbles
+  const raw = completion.choices[0].message.content.trim();
+  const seen = new Set();
+  const segments = raw
+    .split(/\n{2,}|\.(?=\s*[A-ZÀ-Ÿ])/)
+    .map(s => s.trim())
+    .filter(Boolean)
+    .filter(s => {
+      if (seen.has(s)) return false;
+      seen.add(s);
+      return true;
+    });
+  return segments;
 }
